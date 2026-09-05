@@ -1,6 +1,6 @@
 # QF600 Asset Pricing — Compute Alpha
 
-Companion notes for [`QF600 Asset Pricing - Compute Alpha.ipynb`](../QF600%20Asset%20Pricing%20-%20Compute%20Alpha.ipynb).
+Companion notes for [`QF600 Asset Pricing - Compute Alpha.ipynb`](QF600%20Asset%20Pricing%20-%20Compute%20Alpha.ipynb).
 
 The notebook backtests an **investor portfolio** against a **benchmark portfolio**, both rebalanced
 on a fixed schedule, and splits the outcome into the part explained by market exposure and the part
