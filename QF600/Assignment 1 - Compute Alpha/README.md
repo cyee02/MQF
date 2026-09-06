@@ -33,7 +33,7 @@ flowchart TD
     Q --> E[§5.2 excess_returns<br/>R − Rf]
     B --> DD[§6.2 compute_drawdown<br/>drawdowns]
     Q --> M[§6.1 compute_metrics<br/>metrics_table]
-    E --> A[§6.3 compute_alpha_beta<br/>alpha_beta]
+    E --> A[§6.3 compute_alpha_beta<br/>alpha_beta + inference]
     M --> S[§6.4 summary_table]
     DD --> S
     A --> S
@@ -53,7 +53,7 @@ flowchart TD
 | 4 | The four reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
 | 5.1 | `do_rebalance` run once per portfolio. | `portfolio_values` |
 | 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. Subtracting `rf_daily` gives the regression and Sharpe input. | `portfolio_returns`, `excess_returns` |
-| 6.1–6.3 | Metrics, drawdowns, and the alpha/beta regression. | `metrics_table`, `drawdowns`, `max_drawdown_table`, `alpha_beta` |
+| 6.1–6.3 | Metrics, drawdowns, and the alpha/beta regression, including the significance test of alpha. | `metrics_table`, `drawdowns`, `max_drawdown_table`, `alpha_beta` |
 | 6.4 | Everything in one table, plus a string-formatted display copy (alpha and beta are blank for the benchmark — they describe the investor *relative to* it). | `summary_table`, `summary_display` |
 | 7 | Equity curve, underwater plot, regression scatter with the fitted line, and a stacked dashboard — all lets-plot. | `equity_plot`, `drawdown_plot`, `alpha_beta_plot`, `dashboard` |
 | 8 | Colab notes. Section 1 auto-detects the environment, so **Runtime → Run all** reproduces everything unchanged. | — |
@@ -161,13 +161,16 @@ assumption, which understates risk under volatility clustering. Sharpe uses the 
 ```python
 compute_alpha_beta(excess_investor: pd.Series,
                    excess_benchmark: pd.Series,
-                   trading_days: int) -> dict[str, float]
+                   trading_days: int,
+                   confidence: float = 0.95) -> dict[str, float]
 ```
 
 **Input** — daily investor excess returns (regressand), daily benchmark excess returns (regressor,
-same index), and the annualisation factor.
-**Output** — a four-key dict: `"Beta"` (unitless slope), `"Alpha (daily)"` (decimal intercept),
-`"Annualised Alpha"` (decimal), `"R-squared"` (0 to 1).
+same index), the annualisation factor, and the two-sided confidence level for the alpha interval.
+**Output** — a dict of point estimates: `"Beta"` (unitless slope), `"Alpha (daily)"` (decimal
+intercept), `"Annualised Alpha"` (decimal), `"R-squared"` (0 to 1); plus the inference on alpha:
+`"SE Alpha (OLS)"`, `"t-stat (OLS)"`, `"p-value (OLS)"`, `"SE Alpha (HAC)"`, `"t-stat (HAC)"`,
+`"p-value (HAC)"`, `"NW Lags"`, and `"Annual Alpha CI Low"` / `"Annual Alpha CI High"` (decimals).
 
 Ordinary least squares in closed form rather than via a regression library:
 
@@ -184,8 +187,43 @@ line passes through the sample means. $R^2$ equals the squared correlation only 
 case. The daily alpha is compounded, not multiplied by 252, to stay consistent with the geometric
 returns elsewhere.
 
+#### Is the alpha real? — testing $H_0: \alpha = 0$
+
+A point estimate of alpha is not evidence of skill. The function therefore also reports whether the
+intercept is distinguishable from zero, under two different standard errors.
+
+The **textbook OLS** error, with $e_t$ the residuals, $n$ observations and $\bar{x}$ the mean regressor:
+
+$$\hat{\sigma}^2 = \frac{\sum e_t^2}{n-2}, \qquad
+S_{xx} = \sum (x_t - \bar{x})^2, \qquad
+\mathrm{SE}(\hat\alpha) = \hat{\sigma}\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}}$$
+
+with $t = \hat\alpha / \mathrm{SE}(\hat\alpha)$ and $p = 2\Pr(T_{n-2} > |t|)$ from `scipy.stats`.
+
+That error assumes i.i.d. homoskedastic residuals. Daily returns satisfy neither condition — they are
+volatility-clustered and mildly autocorrelated — which makes $\mathrm{SE}(\hat\alpha)$ too small and
+the resulting significance too generous. The **Newey-West HAC** error corrects for both. With
+$X = [\mathbf{1}, x]$, scores $h_t = e_t X_t$, Bartlett weights $w_j = 1 - j/(L+1)$, and the standard
+truncation lag $L = \lfloor 4(n/100)^{2/9} \rfloor$:
+
+$$S = \sum_t h_t h_t' + \sum_{j=1}^{L} w_j \sum_t \left( h_t h_{t-j}' + h_{t-j} h_t' \right),
+\qquad V = (X'X)^{-1} S (X'X)^{-1}$$
+
+$\mathrm{SE}_{\text{HAC}}(\hat\alpha) = \sqrt{V_{00}}$, the intercept entry of the sandwich. Raw
+(unscaled) sums in $S$ paired with $(X'X)^{-1}$ give the coefficient variance directly, with no extra
+factor of $n$. **Where the two disagree, the HAC verdict is the one to believe.**
+
+The reported interval is on annualised alpha, obtained by pushing the daily endpoints through the same
+compounding used for the point estimate:
+
+$$\left(1 + \hat\alpha \pm t_{\text{crit}} \cdot \mathrm{SE}_{\text{HAC}}\right)^{252} - 1$$
+
+Compounding is monotone, so the transformed interval keeps its coverage. Note that the t-statistic
+belongs to the **daily** alpha: annualisation here is a presentational transform of one estimate, not
+a separate test, and a t-stat computed on the compounded figure would not be equivalent.
+
 §7 plots this regression directly — one grey point per trading day, with the fitted line drawn from
-the returned `Beta` and `Alpha (daily)`.
+the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subtitle.
 
 ---
 
@@ -199,8 +237,14 @@ the returned `Beta` and `Alpha (daily)`.
   inverted.
 - **Intersection calendar.** Any date where a single ticker is missing is dropped from all portfolios.
   §3.2 quantifies the cost.
-- **No inference.** The regression reports point estimates only — no standard errors, t-statistics,
-  or Newey-West correction — so nothing here says whether the alpha is statistically distinguishable
-  from zero.
+- **Inference assumes the model is right.** §6.3 tests $H_0: \alpha = 0$ with both OLS and Newey-West
+  standard errors, but a t-statistic only asks whether the intercept differs from zero *given this
+  regression*. A single benchmark is a thin model of risk: exposure to size, value, momentum, or
+  duration would land in the intercept and be read as skill. A significant alpha here is evidence
+  against the one-factor null, not proof of skill.
+- **The p-value is optimistic regardless of the standard error.** SOXX 70 / GLD 30 was chosen after
+  seeing the decade it is tested on, so the test is conditioned on the same data that selected the
+  strategy. No standard error corrects for that — the nominal 5% threshold is not the true false
+  positive rate. This compounds with the hindsight point below.
 - **Chosen in hindsight.** SOXX 70 / GLD 30 over a decade that happened to contain a semiconductor
   boom is a selected backtest, not evidence of a repeatable strategy.
