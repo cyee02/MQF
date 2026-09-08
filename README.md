@@ -6,7 +6,7 @@ Coursework, notebooks, and notes for the MQF programme.
 
 | Work | Notes |
 |---|---|
-| [Assignment 1 — Compute Alpha](QF600/Assignment%201%20-%20Compute%20Alpha/) | Alpha/beta decomposition of an investor portfolio (SOXX/GLD) against a benchmark (IVV/AGG) |
+| [Assignment 1 — Compute Alpha](QF600/Assignment%201%20-%20Compute%20Alpha/) | Alpha/beta decomposition of an investor portfolio (SOXX/GLD) against a benchmark (IVV/AGG), with drawdown and CVaR tail risk |
 
 ---
 

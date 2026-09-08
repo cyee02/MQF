@@ -32,31 +32,36 @@ flowchart TD
     B --> Q[§5.2 portfolio_returns]
     Q --> E[§5.2 excess_returns<br/>R − Rf]
     B --> DD[§6.2 compute_drawdown<br/>drawdowns]
+    Q --> CV[§6.2 compute_cvar<br/>CVaR 95%]
+    DD --> RT[§6.2 risk_table]
+    CV --> RT
     Q --> M[§6.1 compute_metrics<br/>metrics_table]
     E --> A[§6.3 compute_alpha_beta<br/>alpha_beta + inference]
     M --> S[§6.4 summary_table]
-    DD --> S
+    RT --> S
     A --> S
     S --> C[§7 Charts]
+    S --> G[§8 At a glance<br/>charts + summary, one cell]
+    C --> G
 ```
 
 ### Section by section
 
 | § | What happens | Objects produced |
 |---|---|---|
-| 1 | Bootstrap. `ensure_installed` pip-installs `yfinance` and `lets-plot` only if missing; detects Colab and loads its interactive table viewer. All third-party imports live here and nowhere else. | `IN_COLAB` |
-| 2 | Every tunable in one cell — weights, dates, rebalance frequency, capital, annualisation factor, risk-free ticker. Asserts each weight vector sums to 1.0 and de-duplicates the ticker list. | `TICKERS` |
+| 1 | Bootstrap. `ensure_installed` pip-installs `yfinance`, `lets-plot` and `tabulate` (which `DataFrame.to_markdown()` needs in §8) only if missing; detects Colab and loads its interactive table viewer. All third-party imports live here and nowhere else. | `IN_COLAB` |
+| 2 | Every tunable in one cell — weights, dates, rebalance frequency, capital, annualisation factor, CVaR confidence level, risk-free ticker. Asserts each weight vector sums to 1.0 and de-duplicates the ticker list. | `TICKERS` |
 | 3.1 | One batched `yf.download` with `auto_adjust=True`, so prices are already total-return (splits and dividends folded in). Kept twice: `prices_raw` as returned, `prices` restricted to dates every ticker traded. | `prices_raw`, `prices` |
 | 3.2 | Completeness audit per ticker, measured on `prices_raw` before `.dropna()` hides anything. | `completeness` |
 | 3.3 | `^TNX` quotes the 10-year yield as an annualised percent. Converted to a compounded daily rate, reindexed onto the equity calendar, forward-filled across yield-market holidays. | `rf_daily` |
 | 3.4 | `prices.pct_change()`, with day 0 forced to `0` rather than dropped so every curve starts at exactly `INITIAL_CAPITAL`. Horizon in trading days derived here. | `asset_returns`, `HORIZON_DAYS` |
-| 4 | The four reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
+| 4 | The five reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
 | 5.1 | `do_rebalance` run once per portfolio. | `portfolio_values` |
 | 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. Subtracting `rf_daily` gives the regression and Sharpe input. | `portfolio_returns`, `excess_returns` |
-| 6.1–6.3 | Metrics, drawdowns, and the alpha/beta regression, including the significance test of alpha. | `metrics_table`, `drawdowns`, `max_drawdown_table`, `alpha_beta` |
-| 6.4 | Everything in one table, plus a string-formatted display copy (alpha and beta are blank for the benchmark — they describe the investor *relative to* it). | `summary_table`, `summary_display` |
-| 7 | Equity curve, underwater plot, regression scatter with the fitted line, and a stacked dashboard — all lets-plot. | `equity_plot`, `drawdown_plot`, `alpha_beta_plot`, `dashboard` |
-| 8 | Colab notes. Section 1 auto-detects the environment, so **Runtime → Run all** reproduces everything unchanged. | — |
+| 6.1–6.3 | Metrics, downside risk (max drawdown, plus CVaR as both a percentage and a dollar loss on the latest balance), and the alpha/beta regression, including the significance test of alpha. | `metrics_table`, `drawdowns`, `risk_table`, `alpha_beta` |
+| 6.4 | Everything in one table — the §6.1 metrics, the §6.2 risk figures, and *every* key `compute_alpha_beta` returned, inference included — plus a string-formatted display copy whose `format_metric` picks a convention per metric (percent, six-decimal daily, p-value, integer lag count). Alpha and beta are blank for the benchmark: they describe the investor *relative to* it. | `summary_table`, `summary_display` |
+| 7 | Equity curve, underwater plot, regression scatter with the fitted line, and a stacked dashboard — all lets-plot. Legend labels come from `describe()` over the §2 weight dicts, so they cannot drift from the portfolio actually backtested. | `describe`, `equity_plot`, `drawdown_plot`, `alpha_beta_plot`, `dashboard` |
+| 8 | **The one cell to read.** Re-renders the two curves at 950×520 and emits `summary_display` as a markdown table, wrapped in a header line (weights, horizon, capital, rebalance frequency) and the alpha verdict. Change the weights in §2, run all, look here — nothing in the cell is hand-typed. | `summary_charts`, `summary_markdown` |
 
 ### Two return series, deliberately
 
@@ -70,7 +75,7 @@ cycle, where $R_f$ is anything but a constant.
 
 ## 2. Methodology of the reusable functions
 
-Four building blocks, each doing one job.
+Five building blocks, each doing one job.
 
 ### `do_rebalance` — compound a portfolio with periodic rebalancing
 
@@ -128,6 +133,57 @@ $$DD_t = \frac{V_t}{\max_{s \le t} V_s} - 1$$
 
 One `cummax`, one division. Called column-wise through `.apply`, hence Series → Series rather than
 DataFrame → DataFrame. `drawdowns.min()` and `.idxmin()` then give the worst loss and its date.
+
+### `compute_cvar` — conditional value at risk (expected shortfall)
+
+```python
+compute_cvar(portfolio_returns: pd.Series,
+             confidence: float = 0.95) -> float
+```
+
+**Input** — one portfolio's daily simple returns, and the tail cutoff (`CVAR_CONFIDENCE`, 0.95 in §2).
+**Output** — a single negative decimal on the same sign convention as a drawdown: `-0.03` means the
+worst 5% of days lose 3% on average.
+
+Value at risk is the quantile that cuts off the left tail; CVaR is the **mean of what lies beyond it**:
+
+$$\mathrm{VaR}_c = Q_{1-c}(r), \qquad
+\mathrm{CVaR}_c = \mathbb{E}\!\left[\, r \mid r \le \mathrm{VaR}_c \,\right]
+\;=\; \frac{1}{|T_c|}\sum_{t \in T_c} r_t,
+\qquad T_c = \{\, t : r_t \le \mathrm{VaR}_c \,\}$$
+
+The function returns the **percentage** and nothing else — that keeps it reusable on any return
+series. §6.2 then multiplies it by `portfolio_values.iloc[-1]`, each portfolio's value on the last
+date, to state the same tail loss in dollars:
+
+$$\mathrm{CVaR}^{\$}_c = \mathrm{CVaR}_c \times V_{T}$$
+
+So the two CVaR rows in the summary answer different questions. The percentage is a property of the
+strategy and is unchanged by how much money is in it; the dollar figure is a property of the
+*position*, and grows as the account grows — which is why it is struck against the latest value
+rather than `INITIAL_CAPITAL`.
+
+Estimated **historically**: `portfolio_returns.quantile(1 - confidence)` is $\mathrm{VaR}_c$, the
+boolean mask `returns <= VaR` selects $T_c$, and `.mean()` averages it. Two lines, no distributional
+assumption — the sample's own left tail *is* the estimate, so a fat empirical tail is priced in
+rather than normalised away. At $c = 0.95$ the average runs over the worst 5% of the horizon's
+trading days — a few dozen observations over a decade.
+
+Why report it next to volatility and max drawdown, which are already in the table:
+
+| Measure | Answers | Blind to |
+|---|---|---|
+| Annualised volatility | how wide the whole distribution is | which side of the mean, and tail shape |
+| VaR | how bad the threshold day is | everything past the threshold |
+| CVaR | how bad the tail is *on average* | the path — days are treated independently |
+| Max drawdown | the worst peak-to-trough loss along the path | how often, and everything but the single worst episode |
+
+Volatility punishes upside and downside alike and understates fat tails; VaR names a threshold but
+says nothing about how far beyond it a loss can go, and is not sub-additive, so it can penalise
+diversification. CVaR is the coherent risk measure of the three and is what Basel's market-risk
+framework moved to. It is still a *daily* number and path-independent: two portfolios with identical
+CVaR can have very different drawdowns depending on whether the bad days cluster. That is exactly why
+§6.2 reports it alongside max drawdown rather than instead of it.
 
 ### `compute_metrics` — return, volatility, Sharpe
 
@@ -235,6 +291,12 @@ the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subti
 - **Risk-free proxy.** `^TNX` is the 10-year Treasury *yield*, not a 3-month bill. It is the wrong
   duration for a true risk-free rate and will bias Sharpe and alpha whenever the curve is steep or
   inverted.
+- **CVaR is only as good as its sample tail.** The historical estimate averages ~70 observations at
+  95%, so it carries wide sampling error and can only contain crashes the horizon happens to include.
+  It is also computed on daily returns, so it says nothing about a loss accumulated over weeks — that
+  is what the max drawdown next to it is for. The dollar column inherits both limits and adds one: it
+  is a *single day's* loss on the latest balance, not a loss over the horizon, and it is struck
+  against a value that itself moves every day.
 - **Intersection calendar.** Any date where a single ticker is missing is dropped from all portfolios.
   §3.2 quantifies the cost.
 - **Inference assumes the model is right.** §6.3 tests $H_0: \alpha = 0$ with both OLS and Newey-West
