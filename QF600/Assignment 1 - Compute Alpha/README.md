@@ -2,9 +2,9 @@
 
 Companion notes for [`QF600 Asset Pricing - Compute Alpha.ipynb`](QF600%20Asset%20Pricing%20-%20Compute%20Alpha.ipynb).
 
-The notebook backtests an **investor portfolio** against a **benchmark portfolio**, both rebalanced
-on a fixed schedule, and splits the outcome into the part explained by market exposure and the part
-that is not:
+The notebook backtests an **investor portfolio** against a **benchmark portfolio** — each either
+rebalanced on a fixed schedule or bought once and held — and splits the outcome into the part
+explained by market exposure and the part that is not:
 
 $$R_p - R_f = \alpha + \beta (R_m - R_f) + \varepsilon$$
 
@@ -16,7 +16,9 @@ $\beta$ is the reward for carrying benchmark risk. $\alpha$ is what is left over
 | Benchmark | IVV 60% (S&P 500), AGG 40% (US aggregate bonds) |
 
 Horizon 01 Jan 2016 → today, $100,000 initial capital, rebalanced every 60 trading days (~1 quarter),
-252-day annualisation.
+252-day annualisation. Each portfolio is declared as a `weights` mix plus a `rebalance` flag, and only
+the portfolios whose flag is `True` follow that schedule — set it to `False` and that portfolio is
+bought at inception and held, drifting untouched to the last day.
 
 The investor mix is the one moving part. With `OPTIMISE_WEIGHTS = True` (§2) each rebalance solves its
 own Markowitz tangency portfolio by Monte Carlo — 1,000 random long-only allocations scored on the
@@ -30,7 +32,7 @@ the notebook is the fixed-weight backtest it was before, unchanged to the last d
 
 ```mermaid
 flowchart TD
-    P[§2 Parameters<br/>weights, dates, capital<br/>OPTIMISE_WEIGHTS] --> D[§3.1 yfinance download<br/>prices_raw → prices]
+    P[§2 Parameters<br/>weights + rebalance flag<br/>dates, capital, OPTIMISE_WEIGHTS] --> D[§3.1 yfinance download<br/>prices_raw → prices]
     D --> V[§3.2 Completeness check<br/>completeness]
     D --> R[§3.4 asset_returns<br/>daily simple returns]
     T[§3.3 ^TNX yield<br/>rf_daily] --> E
@@ -60,18 +62,18 @@ flowchart TD
 | § | What happens | Objects produced |
 |---|---|---|
 | 1 | Bootstrap. `ensure_installed` pip-installs `yfinance`, `lets-plot` and `tabulate` (which `DataFrame.to_markdown()` needs in §8) only if missing; detects Colab and loads its interactive table viewer. All third-party imports live here and nowhere else. | `IN_COLAB` |
-| 2 | Every tunable in one cell — weights, dates, rebalance frequency, capital, annualisation factor, CVaR confidence level, risk-free ticker, and the `OPTIMISE_WEIGHTS` switch with its Monte Carlo settings (`MC_RUNS`, `LOOKBACK_DAYS`, `RANDOM_SEED`). Asserts each weight vector sums to 1.0 and de-duplicates the ticker list. | `TICKERS` |
+| 2 | Every tunable in one cell — each portfolio as a `weights` mix plus its own `rebalance` flag, then dates, rebalance frequency, capital, annualisation factor, CVaR confidence level, risk-free ticker, and the `OPTIMISE_WEIGHTS` switch with its Monte Carlo settings (`MC_RUNS`, `LOOKBACK_DAYS`, `RANDOM_SEED`). Asserts each portfolio carries both keys, that `rebalance` is a bool, and that its weights sum to 1.0, then de-duplicates the ticker list. | `TICKERS` |
 | 3.1 | One batched `yf.download` with `auto_adjust=True`, so prices are already total-return (splits and dividends folded in). Kept twice: `prices_raw` as returned, `prices` restricted to dates every ticker traded. | `prices_raw`, `prices` |
 | 3.2 | Completeness audit per ticker, measured on `prices_raw` before `.dropna()` hides anything. | `completeness` |
 | 3.3 | `^TNX` quotes the 10-year yield as an annualised percent. Converted to a compounded daily rate, reindexed onto the equity calendar, forward-filled across yield-market holidays. | `rf_daily` |
 | 3.4 | `prices.pct_change()`, with day 0 forced to `0` rather than dropped so every curve starts at exactly `INITIAL_CAPITAL`. Horizon in trading days derived here. | `asset_returns`, `HORIZON_DAYS` |
-| 4 | The seven reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
-| 5.1 | `build_block_weights` resolves the investor's weight schedule (one row per rebalance block, either the §2 mix repeated or a max-Sharpe solve per block), then `do_rebalance` runs once per portfolio. | `investor_weights`, `portfolio_values` |
+| 4 | The eight reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
+| 5.1 | `rebalance_block_days` turns each portfolio's `rebalance` flag into a holding-block length (`REBALANCE_DAYS`, or the whole horizon for buy and hold). `build_block_weights` then resolves the investor's weight schedule (one row per block, either the §2 mix repeated or a max-Sharpe solve per block), and `do_rebalance` runs once per portfolio on its own block length. | `investor_block_days`, `benchmark_block_days`, `investor_weights`, `portfolio_values` |
 | 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. Subtracting `rf_daily` gives the regression and Sharpe input. | `portfolio_returns`, `excess_returns` |
 | 6.1–6.3 | Metrics, downside risk (max drawdown, plus CVaR as both a percentage and a dollar loss on the latest balance), and the alpha/beta regression, including the significance test of alpha. | `metrics_table`, `drawdowns`, `risk_table`, `alpha_beta` |
 | 6.4 | Everything in one table — the §6.1 metrics, the §6.2 risk figures, and *every* key `compute_alpha_beta` returned, inference included — plus a string-formatted display copy whose `format_metric` picks a convention per metric (percent, six-decimal daily, p-value, integer lag count). Alpha and beta are blank for the benchmark: they describe the investor *relative to* it. | `summary_table`, `summary_display` |
-| 7 | Equity curve, underwater plot, investor weight band, regression scatter with the fitted line, and a stacked dashboard — all lets-plot. Labels come from `describe()` over the §2 weight dicts and from `investor_label`, which switches to naming the optimiser when the weights are no longer fixed, so they cannot drift from the portfolio actually backtested. | `describe`, `investor_label`, `equity_plot`, `drawdown_plot`, `weights_plot`, `alpha_beta_plot`, `dashboard` |
-| 8 | **The one cell to read.** Renders the three-panel `dashboard` — equity curve, underwater plot, weight band — and emits `summary_display` as a markdown table, wrapped in a header line (holdings, horizon, capital, rebalance frequency) and the alpha verdict. Change the weights or flip `OPTIMISE_WEIGHTS` in §2, run all, look here — nothing in the cell is hand-typed. | `summary_markdown` |
+| 7 | Equity curve, underwater plot, investor weight band, regression scatter with the fitted line, and a stacked dashboard — all lets-plot. Labels come from `describe()` over the §2 weight mixes, from `describe_rebalancing()` over their `rebalance` flags (so each curve says whether it was rebalanced), and from `investor_label`, which switches to naming the optimiser when the weights are no longer fixed — so they cannot drift from the portfolio actually backtested. | `describe`, `describe_rebalancing`, `investor_label`, `equity_plot`, `drawdown_plot`, `weights_plot`, `alpha_beta_plot`, `dashboard` |
+| 8 | **The one cell to read.** Renders the three-panel `dashboard` — equity curve, underwater plot, weight band — and emits `summary_display` as a markdown table, wrapped in a header line (holdings, horizon, capital, each portfolio's rebalancing policy) and the alpha verdict. Change the weights, flip a `rebalance` flag or flip `OPTIMISE_WEIGHTS` in §2, run all, look here — nothing in the cell is hand-typed. | `summary_markdown` |
 
 ### Two return series, deliberately
 
@@ -85,7 +87,30 @@ cycle, where $R_f$ is anything but a constant.
 
 ## 2. Methodology of the reusable functions
 
-Seven building blocks, each doing one job.
+Eight building blocks, each doing one job.
+
+### `rebalance_block_days` — how long one holding block lasts
+
+```python
+rebalance_block_days(portfolio: dict,
+                     horizon_days: int,
+                     rebalance_days: int) -> int
+```
+
+**Input** — a §2 portfolio definition (only its `rebalance` key is read), the horizon in trading days,
+and the §2 schedule.
+**Output** — `rebalance_days` when the portfolio rebalances, `horizon_days` when it does not.
+
+This is the only place the `rebalance` flag is read, and it is what lets the two functions below stay
+oblivious to it. Rebalancing is implemented by cutting the horizon into blocks of `rebalance_days`, so
+a block length equal to the horizon leaves exactly one block — and a single block has no interior
+rebalance date. Buy and hold therefore needs no separate code path: the weights are applied once, at
+inception, each sleeve compounds at its own rate from there, and the mix on the last day is whatever
+the market made it.
+
+One consequence worth naming: a buy-and-hold portfolio is block 0 and nothing else, and block 0's
+estimation window is empty, so `build_block_weights` hands it the §2 mix whatever `OPTIMISE_WEIGHTS`
+says. There is no history in front of inception to fit an allocation on.
 
 ### `do_rebalance` — compound a portfolio with periodic rebalancing
 
@@ -97,7 +122,8 @@ do_rebalance(asset_returns: pd.DataFrame,
 ```
 
 **Input** — daily simple returns (DatetimeIndex × ticker columns, row 0 = 0.0), the target weights,
-starting dollars, and the rebalance interval in trading days. `weights` is either a **dict** — one
+starting dollars, and the rebalance interval in trading days — the horizon length, from
+`rebalance_block_days`, for a buy-and-hold portfolio. `weights` is either a **dict** — one
 mix held for the whole horizon — or a **DataFrame** of per-block weights from `build_block_weights`,
 one row per holding period. A dict is broadcast to every block on entry, so both cases take exactly
 the same path afterwards and the fixed-weight result is reproduced to the last cent.
@@ -274,7 +300,7 @@ table `do_rebalance` consumes — or, with `optimise=False`, just repeats the §
 
 | | |
 |---|---|
-| **Input** | `asset_returns`, `rf_daily` — the full daily series<br>`weights` — the §2 mix; its **keys** define the investable universe, its **values** the fallback<br>`rebalance_days`, `optimise`, `lookback_days`, `trading_days`, `mc_runs`, `rng` — the §2 settings<br>`min_window` — shortest history worth estimating from |
+| **Input** | `asset_returns`, `rf_daily` — the full daily series<br>`weights` — the §2 mix; its **keys** define the investable universe, its **values** the fallback<br>`rebalance_days` — the block length from `rebalance_block_days`, so a buy-and-hold portfolio arrives as a single block<br>`optimise`, `lookback_days`, `trading_days`, `mc_runs`, `rng` — the §2 settings<br>`min_window` — shortest history worth estimating from |
 | **Output** | a DataFrame indexed `0 … n_blocks-1` by block number, columns ordered like `weights`, every row non-negative and summing to 1.0 |
 
 #### Worked example
@@ -543,7 +569,9 @@ the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subti
   the fixed 70/30 mix, because a trailing year rotates it into gold after each semiconductor drawdown
   and it is still there for the recovery. That is the honest result, and it is the standard critique
   of naive Markowitz rather than a defect in the implementation.
-- **Fixed trading-day schedule.** Rebalances land on a day count, not on calendar quarter-ends.
+- **Fixed trading-day schedule.** Rebalances land on a day count, not on calendar quarter-ends, and
+  a portfolio with `rebalance: False` never rebalances at all — which is free of trading costs but
+  lets the mix drift, so a long horizon ends up holding whatever won, at whatever weight it grew to.
 - **Risk-free proxy.** `^TNX` is the 10-year Treasury *yield*, not a 3-month bill. It is the wrong
   duration for a true risk-free rate and will bias Sharpe and alpha whenever the curve is steep or
   inverted.
