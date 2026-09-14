@@ -6,7 +6,7 @@ Coursework, notebooks, and notes for the MQF programme.
 
 | Work | Notes |
 |---|---|
-| [Assignment 1 — Compute Alpha](QF600/Assignment%201%20-%20Compute%20Alpha/) | Alpha/beta decomposition of an investor portfolio (SOXX/GLD) against a benchmark (IVV/AGG), with drawdown and CVaR tail risk, and optional Markowitz max-Sharpe re-weighting at each rebalance |
+| [Assignment 1 — Compute Alpha](QF600/Assignment%201%20-%20Compute%20Alpha/) | Alpha/beta decomposition of an investor portfolio (QQQ/DBMF/GLD) against a benchmark (SPY), with drawdown and CVaR tail risk, optional Markowitz max-Sharpe re-weighting at each rebalance, and a choice of risk-free convention (10-year, 5-year, or none) compared side by side. Live companion: [Alpha Bench](https://claude.ai/code/artifact/2492151c-5692-4cad-9ea6-f6f1f5f09c46) |
 
 ---
 

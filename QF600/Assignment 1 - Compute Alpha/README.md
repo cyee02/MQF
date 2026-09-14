@@ -1,6 +1,10 @@
 # QF600 Asset Pricing — Compute Alpha
 
 Companion notes for [`QF600 Asset Pricing - Compute Alpha.ipynb`](QF600%20Asset%20Pricing%20-%20Compute%20Alpha.ipynb).
+A live, interactive companion — same math, verified against the notebook to 1e-12 — runs as
+**[Alpha Bench](https://claude.ai/code/artifact/2492151c-5692-4cad-9ea6-f6f1f5f09c46)**: every §2
+parameter (weights, `REBALANCE_DAYS`, `OPTIMISE_WEIGHTS`, `RISK_FREE_TICKER`, `START_DATE`) is a
+control, and the results recompute in the browser as you move them.
 
 The notebook backtests an **investor portfolio** against a **benchmark portfolio**, both rebalanced
 on a fixed schedule, and splits the outcome into the part explained by market exposure and the part
@@ -12,17 +16,21 @@ $\beta$ is the reward for carrying benchmark risk. $\alpha$ is what is left over
 
 | | Holdings |
 |---|---|
-| Investor | SOXX (semiconductors) and GLD (gold), re-weighted at every rebalance for maximum Sharpe — or held at a fixed 70/30 when `OPTIMISE_WEIGHTS` is off |
-| Benchmark | IVV 60% (S&P 500), AGG 40% (US aggregate bonds) |
+| Investor | QQQ (Nasdaq-100) 33.4%, DBMF (managed futures) 33.3%, GLD (gold) 33.3% — or re-weighted at every rebalance for maximum Sharpe when `OPTIMISE_WEIGHTS` is on |
+| Benchmark | SPY 100% (S&P 500) |
 
-Horizon 01 Jan 2016 → today, $100,000 initial capital, rebalanced every 60 trading days (~1 quarter),
-252-day annualisation.
+Horizon 01 Jan 2016 → today, \$100,000 initial capital, rebalanced every 60 trading days (~1 quarter),
+252-day annualisation. $R_f$ is not one series but a choice — see
+[Three risk-free conventions](#three-risk-free-conventions-compared-not-overlaid) below.
 
 The investor mix is the one moving part. With `OPTIMISE_WEIGHTS = True` (§2) each rebalance solves its
-own Markowitz tangency portfolio by Monte Carlo — 1,000 random long-only allocations scored on the
-**trailing 252 trading days**, highest Sharpe wins. The estimation window stops where the holding
-period starts, so a block is never allocated using the returns it goes on to earn. With the flag off
-the notebook is the fixed-weight backtest it was before, unchanged to the last decimal.
+own Markowitz tangency portfolio by Monte Carlo — 10,000 random long-only allocations scored on the
+**trailing 1,260 trading days (~5 years)**, highest Sharpe wins. The estimation window stops where the
+holding period starts, so a block is never allocated using the returns it goes on to earn. With the
+flag off the notebook is the fixed-weight backtest it was before, unchanged to the last decimal — and,
+either way, the setting only has anything to solve for while the investor actually rebalances (see
+`build_block_weights` below: block 0's window is always empty, and with rebalancing off the whole
+horizon *is* block 0).
 
 ---
 
@@ -30,29 +38,33 @@ the notebook is the fixed-weight backtest it was before, unchanged to the last d
 
 ```mermaid
 flowchart TD
-    P[§2 Parameters<br/>weights, dates, capital<br/>OPTIMISE_WEIGHTS] --> D[§3.1 yfinance download<br/>prices_raw → prices]
+    P[§2 Parameters<br/>weights, dates, capital<br/>OPTIMISE_WEIGHTS, RISK_FREE_TICKER] --> D[§3.1 yfinance download<br/>prices_raw → prices]
     D --> V[§3.2 Completeness check<br/>completeness]
     D --> R[§3.4 asset_returns<br/>daily simple returns]
-    T[§3.3 ^TNX yield<br/>rf_daily] --> E
-    R --> W[§5.1 build_block_weights<br/>optimise_weights per block<br/>investor_weights]
-    T --> W
+    T[§3.3 yield_to_daily_rf ×2<br/>^TNX, ^FVX, plus Rf = 0<br/>RF_CONVENTIONS] --> RFL[RISK_FREE_TICKER picks<br/>RF_LABEL, rf_daily]
+    RFL --> W[§5.1 build_block_weights<br/>optimise_weights per block<br/>investor_weights]
+    R --> W
     W --> B[§5.1 do_rebalance<br/>portfolio_values]
     R --> B
     W --> C
     B --> Q[§5.2 portfolio_returns]
-    Q --> E[§5.2 excess_returns<br/>R − Rf]
+    T --> E
+    Q --> E[§5.2 excess_returns<br/>MultiIndex: convention × Investor/Benchmark]
     B --> DD[§6.2 compute_drawdown<br/>drawdowns]
     Q --> CV[§6.2 compute_cvar<br/>CVaR 95%]
     DD --> RT[§6.2 risk_table]
     CV --> RT
     Q --> M[§6.1 compute_metrics<br/>metrics_table]
-    E --> A[§6.3 compute_alpha_beta<br/>alpha_beta + inference]
+    E --> A[§6.3 compute_alpha_beta<br/>on excess_returns RF_LABEL<br/>alpha_beta + inference]
+    E --> ABR[§6.3 alpha_beta_by_rf<br/>same regression, all 3 conventions]
     M --> S[§6.4 summary_table]
     RT --> S
     A --> S
     S --> C[§7 Charts]
+    ABR --> FP[§7 alpha_beta_plot<br/>facet_wrap: one panel, one line, per convention]
     S --> G[§8 At a glance<br/>charts + summary, one cell]
     C --> G
+    FP --> C
 ```
 
 ### Section by section
@@ -60,17 +72,17 @@ flowchart TD
 | § | What happens | Objects produced |
 |---|---|---|
 | 1 | Bootstrap. `ensure_installed` pip-installs `yfinance`, `lets-plot` and `tabulate` (which `DataFrame.to_markdown()` needs in §8) only if missing; detects Colab and loads its interactive table viewer. All third-party imports live here and nowhere else. | `IN_COLAB` |
-| 2 | Every tunable in one cell — weights, dates, rebalance frequency, capital, annualisation factor, CVaR confidence level, risk-free ticker, and the `OPTIMISE_WEIGHTS` switch with its Monte Carlo settings (`MC_RUNS`, `LOOKBACK_DAYS`, `RANDOM_SEED`). Asserts each weight vector sums to 1.0 and de-duplicates the ticker list. | `TICKERS` |
+| 2 | Every tunable in one cell — weights, dates, rebalance frequency, capital, annualisation factor, CVaR confidence level, and the `OPTIMISE_WEIGHTS` switch with its Monte Carlo settings (`MC_RUNS`, `LOOKBACK_DAYS`, `RANDOM_SEED`). `RISK_FREE_TICKER` picks the risk-free convention every headline figure uses — `"^TNX"` (10-year), `"^FVX"` (5-year), or `None` (Rf = 0) — though §3.3 computes all three regardless, for §6.3/§7's comparison. Asserts each weight vector sums to 1.0 and de-duplicates the ticker list. | `TICKERS` |
 | 3.1 | One batched `yf.download` with `auto_adjust=True`, so prices are already total-return (splits and dividends folded in). Kept twice: `prices_raw` as returned, `prices` restricted to dates every ticker traded. | `prices_raw`, `prices` |
 | 3.2 | Completeness audit per ticker, measured on `prices_raw` before `.dropna()` hides anything. | `completeness` |
-| 3.3 | `^TNX` quotes the 10-year yield as an annualised percent. Converted to a compounded daily rate, reindexed onto the equity calendar, forward-filled across yield-market holidays. | `rf_daily` |
+| 3.3 | `yield_to_daily_rf` converts one CBOE Treasury yield index — an annualised percent — to a compounded daily rate, reindexed onto the equity calendar, forward-filled across yield-market holidays. Called for both `^TNX` and `^FVX` unconditionally; paired with a flat `Rf = 0` series, that's `RF_CONVENTIONS`. `RISK_FREE_TICKER` (§2) then picks which becomes `rf_daily` — the rest of the notebook never sees the other two directly. | `yield_to_daily_rf`, `RF_CONVENTIONS`, `RF_LABEL`, `rf_daily` |
 | 3.4 | `prices.pct_change()`, with day 0 forced to `0` rather than dropped so every curve starts at exactly `INITIAL_CAPITAL`. Horizon in trading days derived here. | `asset_returns`, `HORIZON_DAYS` |
 | 4 | The seven reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
 | 5.1 | `build_block_weights` resolves the investor's weight schedule (one row per rebalance block, either the §2 mix repeated or a max-Sharpe solve per block), then `do_rebalance` runs once per portfolio. | `investor_weights`, `portfolio_values` |
-| 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. Subtracting `rf_daily` gives the regression and Sharpe input. | `portfolio_returns`, `excess_returns` |
-| 6.1–6.3 | Metrics, downside risk (max drawdown, plus CVaR as both a percentage and a dollar loss on the latest balance), and the alpha/beta regression, including the significance test of alpha. | `metrics_table`, `drawdowns`, `risk_table`, `alpha_beta` |
+| 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. `excess_returns` subtracts *all three* `RF_CONVENTIONS` at once into a two-level column index — `("10-Year Treasury", "Investor")`, `("Rf = 0", "Benchmark")`, and so on — so §6.3 and §7 never subtract `rf` a second time; `rf_daily` (the `RISK_FREE_TICKER` slice) still feeds Sharpe in §6.1. | `portfolio_returns`, `excess_returns` |
+| 6.1–6.3 | Metrics, downside risk (max drawdown, plus CVaR as both a percentage and a dollar loss on the latest balance), and the alpha/beta regression, including the significance test of alpha — on the `RISK_FREE_TICKER` slice of `excess_returns`. §6.3 then repeats the same regression on each of the other two conventions, comparison only: nothing past that cell reads `alpha_beta_by_rf`. | `metrics_table`, `drawdowns`, `risk_table`, `alpha_beta`, `alpha_beta_by_rf` |
 | 6.4 | Everything in one table — the §6.1 metrics, the §6.2 risk figures, and *every* key `compute_alpha_beta` returned, inference included — plus a string-formatted display copy whose `format_metric` picks a convention per metric (percent, six-decimal daily, p-value, integer lag count). Alpha and beta are blank for the benchmark: they describe the investor *relative to* it. | `summary_table`, `summary_display` |
-| 7 | Equity curve, underwater plot, investor weight band, regression scatter with the fitted line, and a stacked dashboard — all lets-plot. Labels come from `describe()` over the §2 weight dicts and from `investor_label`, which switches to naming the optimiser when the weights are no longer fixed, so they cannot drift from the portfolio actually backtested. | `describe`, `investor_label`, `equity_plot`, `drawdown_plot`, `weights_plot`, `alpha_beta_plot`, `dashboard` |
+| 7 | Equity curve, underwater plot, investor weight band, and a stacked dashboard — all lets-plot. `alpha_beta_plot` is small multiples via `facet_wrap`: one panel per risk-free convention, each with its own points and its own fitted line, rather than three near-identical lines overlaid on one axis (the daily shift between conventions is a few basis points — invisible overlaid, an earlier version of this cell found out). Labels come from `describe()` over the §2 weight dicts and from `investor_label`, which switches to naming the optimiser when the weights are no longer fixed, so they cannot drift from the portfolio actually backtested. | `describe`, `investor_label`, `equity_plot`, `drawdown_plot`, `weights_plot`, `excess_returns_long`, `alpha_beta_plot`, `dashboard` |
 | 8 | **The one cell to read.** Renders the three-panel `dashboard` — equity curve, underwater plot, weight band — and emits `summary_display` as a markdown table, wrapped in a header line (holdings, horizon, capital, rebalance frequency) and the alpha verdict. Change the weights or flip `OPTIMISE_WEIGHTS` in §2, run all, look here — nothing in the cell is hand-typed. | `summary_markdown` |
 
 ### Two return series, deliberately
@@ -80,6 +92,20 @@ flowchart TD
 
 Keeping them separate matters over a horizon spanning both the zero-rate era and the 2022+ hiking
 cycle, where $R_f$ is anything but a constant.
+
+### Three risk-free conventions, compared not overlaid
+
+$R_f$ is itself a choice, so §3.3 computes it three ways rather than one — 10-year Treasury (`^TNX`),
+5-year (`^FVX`), and Rf = 0 — and `RISK_FREE_TICKER` (§2) only picks which becomes the `rf_daily`
+that Sharpe, CVaR-in-dollars and the headline `alpha_beta` all read. The other two live on in
+`excess_returns`'s extra columns purely for comparison: §6.3's `alpha_beta_by_rf` runs the same
+regression under all three, and §7 draws all three as **separate panels**, not one overlaid line
+each. Overlaying was the first attempt, and it produced a chart with what looked like one line: the
+daily shift in excess return between conventions is a few basis points, so three fitted lines sit
+almost exactly on top of each other regardless of colour or dash weight. A panel each — sharing one
+fixed axis scale, the way `facet_wrap` does by default — is the version that actually shows three
+distinguishable regressions, each correct on its own data, rather than the honest-but-illegible
+"they're all nearly the same" result hiding inside a single axis.
 
 ---
 
@@ -518,7 +544,8 @@ belongs to the **daily** alpha: annualisation here is a presentational transform
 a separate test, and a t-stat computed on the compounded figure would not be equivalent.
 
 §7 plots this regression directly — one grey point per trading day, with the fitted line drawn from
-the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subtitle.
+the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subtitle — once per
+risk-free convention, each panel its own call to this function via `alpha_beta_by_rf` (§6.3).
 
 ---
 
@@ -528,25 +555,30 @@ the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subti
   assumed. Rebalancing every 60 trading days is cheap here and would not be in practice — and the
   optimiser makes this bite harder than the fixed mix did, because it routinely swings the allocation
   from one corner of the simplex to the other, turning over most of the book in a single trade.
-- **The optimiser is a sampler, not a solver.** 1,000 draws approximate the tangency portfolio rather
-  than locate it, and the approximation degrades quickly as assets are added. See
+- **The optimiser is a sampler, not a solver.** 10,000 draws approximate the tangency portfolio rather
+  than locate it, and the approximation degrades as assets are added. See
   [`optimise_weights`](#optimise_weights--the-max-sharpe-portfolio-by-monte-carlo).
 - **A trailing window removes look-ahead from the weights, not from the experiment.** Each rebalance
   is fitted only to returns that preceded it, so the equity curve is one a real investor could have
-  traded. But the *universe* — SOXX and GLD — was still picked after seeing the decade, and the
-  lookback, the block length and the flag itself were chosen against this same sample. Honest weights
-  inside a hindsight-selected experiment are still a hindsight-selected experiment.
+  traded. But the *universe* named in §2 was still picked after seeing the horizon, and the lookback,
+  the block length and the flag itself were chosen against this same sample. Honest weights inside a
+  hindsight-selected experiment are still a hindsight-selected experiment.
 - **Estimated moments are noisy, and max-Sharpe amplifies the noise.** Mean-variance optimisation is
   notoriously unstable in the inputs: a small change in the estimated mean moves the tangency
-  portfolio a long way, which is why the solved weights sit at or near a corner most of the time and
-  flip between them. On this sample that costs real money — the optimised portfolio finishes *below*
-  the fixed 70/30 mix, because a trailing year rotates it into gold after each semiconductor drawdown
-  and it is still there for the recovery. That is the honest result, and it is the standard critique
-  of naive Markowitz rather than a defect in the implementation.
+  portfolio a long way. On the current §2 mix that costs real money — re-solving every 60 days on a
+  trailing 1,260-day (5-year) window finishes **18% below** the fixed-weight mix over the same
+  horizon (\$256,601 vs \$313,332; Sharpe 0.82 vs 1.09), even though this lookback is long enough that
+  it does *not* degenerate into the corner-flipping the shorter window used to — 0% of solved blocks
+  put more than 80% into one asset, against the near-constant flipping a 1-year lookback produces.
+  Underperforming without ever cornering is still the standard critique of naive Markowitz — the
+  estimation error costs more than concentration risk does here — not a defect in the implementation,
+  and not a reason to expect the sign to flip on a different sample.
 - **Fixed trading-day schedule.** Rebalances land on a day count, not on calendar quarter-ends.
-- **Risk-free proxy.** `^TNX` is the 10-year Treasury *yield*, not a 3-month bill. It is the wrong
-  duration for a true risk-free rate and will bias Sharpe and alpha whenever the curve is steep or
-  inverted.
+- **Risk-free proxy, whichever convention is selected.** `RISK_FREE_TICKER` chooses among two
+  Treasury *yields* (`^TNX`, `^FVX`) and Rf = 0 — none is a duration-matched short bill. A yield
+  convention biases Sharpe and alpha whenever the curve is steep or inverted; Rf = 0 sidesteps that
+  bias by subtracting nothing, which overstates both by the true risk-free rate instead. §6.3's
+  by-convention comparison exists so that choice is visible rather than assumed away.
 - **CVaR is only as good as its sample tail.** The historical estimate averages ~70 observations at
   95%, so it carries wide sampling error and can only contain crashes the horizon happens to include.
   It is also computed on daily returns, so it says nothing about a loss accumulated over weeks — that
@@ -560,9 +592,9 @@ the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subti
   regression*. A single benchmark is a thin model of risk: exposure to size, value, momentum, or
   duration would land in the intercept and be read as skill. A significant alpha here is evidence
   against the one-factor null, not proof of skill.
-- **The p-value is optimistic regardless of the standard error.** SOXX 70 / GLD 30 was chosen after
-  seeing the decade it is tested on, so the test is conditioned on the same data that selected the
+- **The p-value is optimistic regardless of the standard error.** The §2 mix was chosen after seeing
+  the horizon it is tested on, so the test is conditioned on the same data that selected the
   strategy. No standard error corrects for that — the nominal 5% threshold is not the true false
   positive rate. This compounds with the hindsight point below.
-- **Chosen in hindsight.** SOXX 70 / GLD 30 over a decade that happened to contain a semiconductor
-  boom is a selected backtest, not evidence of a repeatable strategy.
+- **Chosen in hindsight.** Any fixed mix backtested over a decade it was picked after seeing — this
+  one included — is a selected backtest, not evidence of a repeatable strategy.
