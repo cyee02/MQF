@@ -6,9 +6,8 @@ A live, interactive companion — same math, verified against the notebook to 1e
 parameter (weights, `REBALANCE_DAYS`, `OPTIMISE_WEIGHTS`, `RISK_FREE_TICKER`, `START_DATE`) is a
 control, and the results recompute in the browser as you move them.
 
-The notebook backtests an **investor portfolio** against a **benchmark portfolio**, both rebalanced
-on a fixed schedule, and splits the outcome into the part explained by market exposure and the part
-that is not:
+The notebook backtests an **investor portfolio** against a **benchmark portfolio** and splits the
+outcome into the part explained by market exposure and the part that is not:
 
 $$R_p - R_f = \alpha + \beta (R_m - R_f) + \varepsilon$$
 
@@ -19,18 +18,25 @@ $\beta$ is the reward for carrying benchmark risk. $\alpha$ is what is left over
 | Investor | QQQ (Nasdaq-100) 33.4%, DBMF (managed futures) 33.3%, GLD (gold) 33.3% — or re-weighted at every rebalance for maximum Sharpe when `OPTIMISE_WEIGHTS` is on |
 | Benchmark | SPY 100% (S&P 500) |
 
-Horizon 01 Jan 2016 → today, \$100,000 initial capital, rebalanced every 60 trading days (~1 quarter),
-252-day annualisation. $R_f$ is not one series but a choice — see
+Horizon 01 Jan 2016 → today, \$100,000 initial capital, 60-trading-day rebalance interval
+(~1 quarter), 252-day annualisation. $R_f$ is not one series but a choice — see
 [Three risk-free conventions](#three-risk-free-conventions-compared-not-overlaid) below.
+
+The investor is backtested **twice from that one mix** — rebalanced every `REBALANCE_DAYS`, and
+bought on day 0 and never reset — so the price of the schedule sits beside the result it buys in
+every table and chart, with no flag to flip and re-run. See
+[Rebalanced and held, side by side](#rebalanced-and-held-side-by-side) below.
 
 The investor mix is the one moving part. With `OPTIMISE_WEIGHTS = True` (§2) each rebalance solves its
 own Markowitz tangency portfolio by Monte Carlo — 10,000 random long-only allocations scored on the
 **trailing 1,260 trading days (~5 years)**, highest Sharpe wins. The estimation window stops where the
 holding period starts, so a block is never allocated using the returns it goes on to earn. With the
-flag off the notebook is the fixed-weight backtest it was before, unchanged to the last decimal — and,
-either way, the setting only has anything to solve for while the investor actually rebalances (see
-`build_block_weights` below: block 0's window is always empty, and with rebalancing off the whole
-horizon *is* block 0).
+flag off the notebook is the fixed-weight backtest it was before, unchanged to the last decimal.
+
+It reaches the rebalanced column only. A held run is a single block spanning the horizon, and block 0
+has no preceding window to estimate from (see `build_block_weights` below), so the held investor is
+the §2 mix whatever `OPTIMISE_WEIGHTS` says — which is exactly what keeps the two columns a
+comparison of the *schedule* and nothing else.
 
 ---
 
@@ -44,24 +50,24 @@ flowchart TD
     T[§3.3 yield_to_daily_rf ×2<br/>^TNX, ^FVX, plus Rf = 0<br/>RF_CONVENTIONS] --> RFL[RISK_FREE_TICKER picks<br/>RF_LABEL, rf_daily]
     RFL --> W[§5.1 build_block_weights<br/>optimise_weights per block<br/>investor_weights]
     R --> W
-    W --> B[§5.1 do_rebalance<br/>portfolio_values]
+    W --> B[§5.1 do_rebalance ×3<br/>Investor rebalanced / held / Benchmark<br/>portfolio_values]
     R --> B
     W --> C
     B --> Q[§5.2 portfolio_returns]
     T --> E
-    Q --> E[§5.2 excess_returns<br/>MultiIndex: convention × Investor/Benchmark]
+    Q --> E[§5.2 excess_returns<br/>MultiIndex: 3 conventions × 3 portfolios]
     B --> DD[§6.2 compute_drawdown<br/>drawdowns]
     Q --> CV[§6.2 compute_cvar<br/>CVaR 95%]
     DD --> RT[§6.2 risk_table]
     CV --> RT
     Q --> M[§6.1 compute_metrics<br/>metrics_table]
-    E --> A[§6.3 compute_alpha_beta<br/>on excess_returns RF_LABEL<br/>alpha_beta + inference]
-    E --> ABR[§6.3 alpha_beta_by_rf<br/>same regression, all 3 conventions]
-    M --> S[§6.4 summary_table]
+    E --> A[§6.3 compute_alpha_beta ×2<br/>on excess_returns RF_LABEL<br/>alpha_beta, alpha_beta_held]
+    E --> ABR[§6.3 alpha_beta_by_rf<br/>3 conventions × 2 rebalancing modes]
+    M --> S[§6.4 summary_table<br/>rebalanced | held | Benchmark]
     RT --> S
     A --> S
     S --> C[§7 Charts]
-    ABR --> FP[§7 alpha_beta_plot<br/>facet_wrap: one panel, one line, per convention]
+    ABR --> FP[§7 alpha_beta_plot<br/>facet per convention, one line per mode]
     S --> G[§8 At a glance<br/>charts + summary, one cell]
     C --> G
     FP --> C
@@ -78,12 +84,12 @@ flowchart TD
 | 3.3 | `yield_to_daily_rf` converts one CBOE Treasury yield index — an annualised percent — to a compounded daily rate, reindexed onto the equity calendar, forward-filled across yield-market holidays. Called for both `^TNX` and `^FVX` unconditionally; paired with a flat `Rf = 0` series, that's `RF_CONVENTIONS`. `RISK_FREE_TICKER` (§2) then picks which becomes `rf_daily` — the rest of the notebook never sees the other two directly. | `yield_to_daily_rf`, `RF_CONVENTIONS`, `RF_LABEL`, `rf_daily` |
 | 3.4 | `prices.pct_change()`, with day 0 forced to `0` rather than dropped so every curve starts at exactly `INITIAL_CAPITAL`. Horizon in trading days derived here. | `asset_returns`, `HORIZON_DAYS` |
 | 4 | The seven reusable functions — see [§2](#2-methodology-of-the-reusable-functions) below. | — |
-| 5.1 | `build_block_weights` resolves the investor's weight schedule (one row per rebalance block, either the §2 mix repeated or a max-Sharpe solve per block), then `do_rebalance` runs once per portfolio. | `investor_weights`, `portfolio_values` |
-| 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. `excess_returns` subtracts *all three* `RF_CONVENTIONS` at once into a two-level column index — `("10-Year Treasury", "Investor")`, `("Rf = 0", "Benchmark")`, and so on — so §6.3 and §7 never subtract `rf` a second time; `rf_daily` (the `RISK_FREE_TICKER` slice) still feeds Sharpe in §6.1. | `portfolio_returns`, `excess_returns` |
-| 6.1–6.3 | Metrics, downside risk (max drawdown, plus CVaR as both a percentage and a dollar loss on the latest balance), and the alpha/beta regression, including the significance test of alpha — on the `RISK_FREE_TICKER` slice of `excess_returns`. §6.3 then repeats the same regression on each of the other two conventions, comparison only: nothing past that cell reads `alpha_beta_by_rf`. | `metrics_table`, `drawdowns`, `risk_table`, `alpha_beta`, `alpha_beta_by_rf` |
-| 6.4 | Everything in one table — the §6.1 metrics, the §6.2 risk figures, and *every* key `compute_alpha_beta` returned, inference included — plus a string-formatted display copy whose `format_metric` picks a convention per metric (percent, six-decimal daily, p-value, integer lag count). Alpha and beta are blank for the benchmark: they describe the investor *relative to* it. | `summary_table`, `summary_display` |
-| 7 | Equity curve, underwater plot, investor weight band, and a stacked dashboard — all lets-plot. `alpha_beta_plot` is small multiples via `facet_wrap`: one panel per risk-free convention, each with its own points and its own fitted line, rather than three near-identical lines overlaid on one axis (the daily shift between conventions is a few basis points — invisible overlaid, an earlier version of this cell found out). Labels come from `describe()` over the §2 weight dicts and from `investor_label`, which switches to naming the optimiser when the weights are no longer fixed, so they cannot drift from the portfolio actually backtested. | `describe`, `investor_label`, `equity_plot`, `drawdown_plot`, `weights_plot`, `excess_returns_long`, `alpha_beta_plot`, `dashboard` |
-| 8 | **The one cell to read.** Renders the three-panel `dashboard` — equity curve, underwater plot, weight band — and emits `summary_display` as a markdown table, wrapped in a header line (holdings, horizon, capital, rebalance frequency) and the alpha verdict. Change the weights or flip `OPTIMISE_WEIGHTS` in §2, run all, look here — nothing in the cell is hand-typed. | `summary_markdown` |
+| 5.1 | `build_block_weights` resolves the investor's weight schedule (one row per rebalance block, either the §2 mix repeated or a max-Sharpe solve per block), then `do_rebalance` runs **three** times: the investor on that schedule, the investor with `rebalance_days = HORIZON_DAYS` (one block = buy-and-hold), and the benchmark. Everything downstream flows from these three columns, so no table or chart needs special-casing to carry both investor runs. | `INVESTOR_REBALANCED`, `INVESTOR_HELD`, `BENCHMARK`, `investor_weights`, `portfolio_values` |
+| 5.2 | Rebalancing only reshuffles an unchanged total, so portfolio return is just the day-over-day change in value, valid across rebalance dates too. `excess_returns` subtracts *all three* `RF_CONVENTIONS` at once into a two-level column index — `("10-Year Treasury", "Investor (rebalanced)")`, `("Rf = 0", "Benchmark")`, and so on — three conventions × three portfolios, nine columns — so §6.3 and §7 never subtract `rf` a second time; `rf_daily` (the `RISK_FREE_TICKER` slice) still feeds Sharpe in §6.1. | `portfolio_returns`, `excess_returns` |
+| 6.1–6.3 | Metrics, downside risk (max drawdown, plus CVaR as both a percentage and a dollar loss on the latest balance), and the alpha/beta regression with its significance test — each computed for all three columns, on the `RISK_FREE_TICKER` slice of `excess_returns`. `alpha_beta` (rebalanced) stays the headline every later section reads; `alpha_beta_held` is its counterpart. §6.3 then repeats the regression across both dimensions at once — three conventions × two rebalancing modes — comparison only: nothing past that cell reads `alpha_beta_by_rf`. | `metrics_table`, `drawdowns`, `risk_table`, `alpha_beta`, `alpha_beta_held`, `alpha_beta_by_rf` |
+| 6.4 | Everything in one table, three columns wide — the §6.1 metrics, the §6.2 risk figures, and *every* key `compute_alpha_beta` returned, inference included — plus a string-formatted display copy whose `format_metric` picks a convention per metric (percent, six-decimal daily, p-value, integer lag count). Read it **across**: the two investor columns differ only in the reset, so every gap between them is the schedule's doing. The regression rows are supplied as a `pd.Series` keyed by column name, so pandas aligns them by portfolio rather than by position and the benchmark's cells fall out `NaN` on their own — alpha and beta describe an investor run *relative to* the benchmark, which cannot have a beta against itself. | `summary_table`, `summary_display` |
+| 7 | Equity curve, underwater plot, investor weight band, and a stacked dashboard — all lets-plot. The equity and underwater plots melt `portfolio_values`/`drawdowns`, so both investor runs appear in each for free, keyed to one `PORTFOLIO_COLORS` palette the whole notebook shares. `alpha_beta_plot` is small multiples via `facet_wrap`: one panel per risk-free convention (three near-identical lines overlaid on one axis is invisible — an earlier version of this cell found out), with the rebalanced-vs-held comparison drawn *inside* each panel as two fitted lines from the six-row `fitted_lines` frame. Labels come from `describe()` over the §2 weight dicts and from `investor_label`, which switches to naming the optimiser when the weights are no longer fixed, so they cannot drift from the portfolio actually backtested. | `describe`, `investor_label`, `PORTFOLIO_COLORS`, `equity_plot`, `drawdown_plot`, `weights_plot`, `excess_returns_long`, `fitted_lines`, `alpha_beta_plot`, `dashboard` |
+| 8 | **The one cell to read.** Renders the three-panel `dashboard` — equity curve, underwater plot, weight band — and emits `summary_display` as a markdown table, wrapped in a header line (holdings, horizon, capital, rebalance count, and what the schedule was worth in dollars), both regressions, and the alpha verdict. Change the weights or flip `OPTIMISE_WEIGHTS` in §2, run all, look here — nothing in the cell is hand-typed. | `summary_markdown` |
 
 ### Two return series, deliberately
 
@@ -106,6 +112,54 @@ almost exactly on top of each other regardless of colour or dash weight. A panel
 fixed axis scale, the way `facet_wrap` does by default — is the version that actually shows three
 distinguishable regressions, each correct on its own data, rather than the honest-but-illegible
 "they're all nearly the same" result hiding inside a single axis.
+
+### Rebalanced and held, side by side
+
+A rebalance interval is a choice in exactly the way $R_f$ is, and it used to be answered by editing
+`REBALANCE_DAYS` and re-running. It no longer is: §5.1 backtests the investor **both ways on every
+run**, from the same §2 mix, and every table and chart below carries both columns.
+
+The second run needs no new machinery. A rebalance block as long as the whole horizon *is*
+buy-and-hold — one block, one weight vector, no reset — so the held column is just `do_rebalance`
+with `rebalance_days = HORIZON_DAYS`, taking the §2 mix straight from the dict instead of the solved
+block table. Naming the three columns once (`INVESTOR_REBALANCED`, `INVESTOR_HELD`, `BENCHMARK`) and
+putting them in `portfolio_values` means `portfolio_returns`, `excess_returns`, `metrics_table`,
+`drawdowns`, `risk_table`, `summary_table`, the equity plot and the underwater plot all pick the
+third series up for free — they iterate columns, they never name portfolios.
+
+On the current §2 parameters the comparison reads:
+
+| | Rebalanced (60d) | Held | Difference |
+|---|---|---|---|
+| Final value | \$313,332 | \$309,439 | +\$3,893 |
+| Annualised return | 16.88% | 16.68% | +0.20 pp |
+| Annualised volatility | 12.31% | 13.07% | −0.76 pp |
+| Annualised Sharpe | 1.0905 | 1.0214 | +0.069 |
+| Max drawdown | −14.58% | −14.72% | +0.14 pp |
+| Beta | 0.4518 | 0.4949 | −0.043 |
+| Annualised alpha | 7.47% | 6.76% | +0.71 pp |
+
+The schedule's effect here is mostly **risk**, not return: it trims volatility and beta by selling
+whatever ran ahead, which is also why the alpha estimate rises — less of the return is attributable
+to benchmark exposure. The dollar gap is small enough to be worth remembering that this backtest
+charges nothing for the trades that produce it (see *Assumptions and limitations*).
+
+#### Why the alpha–beta chart draws two lines and one cloud
+
+The obvious way to show this in §7 would be two point clouds per panel. It does not work, and the
+reason is measurable: the two runs hold the same assets at the same target weights and differ only
+in the reset, so their daily excess returns correlate at **0.9936**, and the mean vertical gap
+between them is 0.00065 against a cloud standard deviation of 0.00775 — about **8%** of the spread.
+Two clouds would be one blob drawn twice, which is the same failure the three overlaid $R_f$ lines
+produced above.
+
+The fitted lines are a different matter. Beta differs by 0.043 (0.4518 vs 0.4949), which over the
+±10% span of the x-axis fans the two lines more than a full standard deviation of $y$ apart at the
+edges — clearly visible, and exactly where the comparison lives. So each panel draws the
+**rebalanced run's cloud** in grey for scale and **both fitted lines** over it, from the six-row
+`fitted_lines` frame (three conventions × two modes). Faceting the modes into a second row of panels
+was the alternative; putting both lines in one frame won because comparing two lines inside a panel
+is much easier than comparing two near-identical clouds across stacked panels.
 
 ---
 
@@ -543,9 +597,10 @@ Compounding is monotone, so the transformed interval keeps its coverage. Note th
 belongs to the **daily** alpha: annualisation here is a presentational transform of one estimate, not
 a separate test, and a t-stat computed on the compounded figure would not be equivalent.
 
-§7 plots this regression directly — one grey point per trading day, with the fitted line drawn from
-the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subtitle — once per
-risk-free convention, each panel its own call to this function via `alpha_beta_by_rf` (§6.3).
+§7 plots this regression directly — one grey point per trading day, with each fitted line drawn from
+the returned `Beta` and `Alpha (daily)`, and the Newey-West verdict in the subtitle. `alpha_beta_by_rf`
+(§6.3) calls this function six times, once per (risk-free convention, rebalancing mode): the
+convention picks the panel, the mode picks the line within it.
 
 ---
 
@@ -555,6 +610,11 @@ risk-free convention, each panel its own call to this function via `alpha_beta_b
   assumed. Rebalancing every 60 trading days is cheap here and would not be in practice — and the
   optimiser makes this bite harder than the fixed mix did, because it routinely swings the allocation
   from one corner of the simplex to the other, turning over most of the book in a single trade.
+  This lands directly on the rebalanced-vs-held comparison: the schedule's \$3,893 edge is gross of
+  the 30 rebalances that produced it, while the held column pays for exactly one trade on day 0. Any
+  realistic cost assumption closes some of that gap and could close all of it — the volatility and
+  beta reduction in the same comparison is the more robust finding, since it does not depend on the
+  dollar margin surviving costs.
 - **The optimiser is a sampler, not a solver.** 10,000 draws approximate the tangency portfolio rather
   than locate it, and the approximation degrades as assets are added. See
   [`optimise_weights`](#optimise_weights--the-max-sharpe-portfolio-by-monte-carlo).
@@ -574,6 +634,11 @@ risk-free convention, each panel its own call to this function via `alpha_beta_b
   estimation error costs more than concentration risk does here — not a defect in the implementation,
   and not a reason to expect the sign to flip on a different sample.
 - **Fixed trading-day schedule.** Rebalances land on a day count, not on calendar quarter-ends.
+- **Two schedules compared, not a schedule optimised.** §5.1 answers "rebalance every
+  `REBALANCE_DAYS`, or never?" — it does not search over intervals. Sweeping `REBALANCE_DAYS` and
+  reading the best result off the same data it was chosen on would be selection on the test set;
+  the two columns are a like-for-like contrast at one pre-set interval, not evidence that 60 days
+  is the right one.
 - **Risk-free proxy, whichever convention is selected.** `RISK_FREE_TICKER` chooses among two
   Treasury *yields* (`^TNX`, `^FVX`) and Rf = 0 — none is a duration-matched short bill. A yield
   convention biases Sharpe and alpha whenever the curve is steep or inverted; Rf = 0 sidesteps that
