@@ -1,0 +1,74 @@
+{
+ "weights": {
+  "Naive MVO": {
+   "GLD": 4.0834,
+   "QQQ": 1.8062,
+   "SOXX": 1.6368,
+   "TLT": -0.1425
+  },
+  "Ridge MVO": {
+   "GLD": 0.9203,
+   "QQQ": 0.8703,
+   "SOXX": 1.2603,
+   "TLT": -0.0636
+  },
+  "Factor Neutral": {
+   "GLD": 2.4128,
+   "QQQ": -2.6881,
+   "SOXX": 1.8294,
+   "TLT": -0.5542
+  }
+ },
+ "exposures": {
+  "Naive MVO": {
+   "MKT": 4.3839,
+   "HML": -2.679
+  },
+  "Ridge MVO": {
+   "MKT": 2.6711,
+   "HML": -1.5376
+  },
+  "Factor Neutral": {
+   "MKT": 0.0,
+   "HML": -0.0
+  },
+  "Benchmark": {
+   "MKT": 0.5712,
+   "HML": -0.4046
+  }
+ },
+ "TE": {
+  "factor": {
+   "Naive MVO": 0.6985,
+   "Ridge MVO": 0.2032,
+   "Factor Neutral": 0.017
+  },
+  "specific": {
+   "Naive MVO": 0.4667,
+   "Ridge MVO": 0.0515,
+   "Factor Neutral": 0.246
+  },
+  "TE": {
+   "Naive MVO": 1.0795,
+   "Ridge MVO": 0.5047,
+   "Factor Neutral": 0.5129
+  }
+ },
+ "gross": {
+  "Naive MVO": 7.669,
+  "Ridge MVO": 3.115,
+  "Factor Neutral": 7.484
+ },
+ "max_drawdown": {
+  "Naive MVO": -0.945369458958706,
+  "Ridge MVO": -0.7476691005409941,
+  "Factor Neutral": -0.5087240538433087,
+  "Equal weight": -0.3066621981209431
+ },
+ "final_value": {
+  "Naive MVO": 211.84302102048304,
+  "Ridge MVO": 110.80483233535742,
+  "Factor Neutral": 9.630097047360225,
+  "Equal weight": 4.721096640685788
+ }
+}
