@@ -131,13 +131,13 @@ On the current §2 parameters the comparison reads:
 
 | | Rebalanced (60d) | Held | Difference |
 |---|---|---|---|
-| Final value | \$313,332 | \$309,439 | +\$3,893 |
-| Annualised return | 16.88% | 16.68% | +0.20 pp |
-| Annualised volatility | 12.31% | 13.07% | −0.76 pp |
-| Annualised Sharpe | 1.0905 | 1.0214 | +0.069 |
+| Final value | \$315,383 | \$310,543 | +\$4,840 |
+| Annualised return | 16.83% | 16.58% | +0.24 pp |
+| Annualised volatility | 12.29% | 13.06% | −0.77 pp |
+| Annualised Sharpe | 1.0871 | 1.0144 | +0.073 |
 | Max drawdown | −14.58% | −14.72% | +0.14 pp |
-| Beta | 0.4518 | 0.4949 | −0.043 |
-| Annualised alpha | 7.47% | 6.76% | +0.71 pp |
+| Beta | 0.4523 | 0.4959 | −0.044 |
+| Annualised alpha | 7.47% | 6.72% | +0.75 pp |
 
 The schedule's effect here is mostly **risk**, not return: it trims volatility and beta by selling
 whatever ran ahead, which is also why the alpha estimate rises — less of the return is attributable
@@ -148,12 +148,12 @@ charges nothing for the trades that produce it (see *Assumptions and limitations
 
 The obvious way to show this in §7 would be two point clouds per panel. It does not work, and the
 reason is measurable: the two runs hold the same assets at the same target weights and differ only
-in the reset, so their daily excess returns correlate at **0.9936**, and the mean vertical gap
-between them is 0.00065 against a cloud standard deviation of 0.00775 — about **8%** of the spread.
+in the reset, so their daily excess returns correlate at **0.9934**, and the mean vertical gap
+between them is 0.00066 against a cloud standard deviation of 0.00774 — about **8.5%** of the spread.
 Two clouds would be one blob drawn twice, which is the same failure the three overlaid $R_f$ lines
 produced above.
 
-The fitted lines are a different matter. Beta differs by 0.043 (0.4518 vs 0.4949), which over the
+The fitted lines are a different matter. Beta differs by 0.044 (0.4523 vs 0.4959), which over the
 ±10% span of the x-axis fans the two lines more than a full standard deviation of $y$ apart at the
 edges — clearly visible, and exactly where the comparison lives. So each panel draws the
 **rebalanced run's cloud** in grey for scale and **both fitted lines** over it, from the six-row
@@ -610,8 +610,8 @@ convention picks the panel, the mode picks the line within it.
   assumed. Rebalancing every 60 trading days is cheap here and would not be in practice — and the
   optimiser makes this bite harder than the fixed mix did, because it routinely swings the allocation
   from one corner of the simplex to the other, turning over most of the book in a single trade.
-  This lands directly on the rebalanced-vs-held comparison: the schedule's \$3,893 edge is gross of
-  the 30 rebalances that produced it, while the held column pays for exactly one trade on day 0. Any
+  This lands directly on the rebalanced-vs-held comparison: the schedule's \$4,840 edge is gross of
+  the 31 rebalances that produced it, while the held column pays for exactly one trade on day 0. Any
   realistic cost assumption closes some of that gap and could close all of it — the volatility and
   beta reduction in the same comparison is the more robust finding, since it does not depend on the
   dollar margin surviving costs.
