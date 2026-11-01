@@ -1,0 +1,19 @@
+# QF600 Final Project, Group 6
+pandas
+numpy
+scipy
+statsmodels
+fredapi
+pyyaml
+requests
+openpyxl
+xlrd
+yfinance
+lets-plot
+matplotlib
+python-docx
+python-pptx
+lxml
+nbformat
+nbconvert
+ipykernel
