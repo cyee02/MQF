@@ -19,7 +19,7 @@ Source: `course_materials/QF600 Group Project Guideline.pdf` (2 pages, SMU Class
 |----|-------------|----------------|
 | R0.1 | Real-world asset-pricing application based on recent literature | Maloney (2024, JPM) "Honey, the Fed Shrunk the Equity Premium" → `context/03` |
 | R0.2 | Insight from data understanding, modelling and optimisation | Walkthrough steps 2–5 → `context/02` |
-| R0.3 | Iterative trial-and-error, not single-shot | Walk-forward backtests and strategy variants S0–S6 (step 6); show what changed between iterations |
+| R0.3 | Iterative trial-and-error, not single-shot | Walk-forward backtests and strategy variants B, S1–S4 and fixed mixes, with walk-forward tuning (step 5); show what changed between iterations |
 
 ## Deliverables (p.2)
 

@@ -188,7 +188,7 @@ Walkthrough mapping: **"low-rate portfolio" = column 2; "high-rate portfolio" = 
 | Liquid alts | 0.2 | 0.2 | 0.2 | 0.2 | 0.2 |
 
 Column 2 puts > 50% of capital (≈ 75% of risk) in public + private equity to hit the 3% real target ("reach for yield", Hau & Lai 2016). Scenario 1 = "a higher-cash-rate tide lifts all boats" (+1% real return for all assets). Scenario 2 = SR penalties → more liquid alts.
-**Important:** Exhibit 9 is built from **assumed** inputs and **never backtested** in the paper. Our step 6 tests it on ETF data (SPY, PSP, IEF, HYG, VNQ, momentum for liquid alts).
+**Important:** Exhibit 9 is built from **assumed** inputs and **never backtested** in the paper. Our step 5 tests it on ETF data (SPY, PSP, IEF, HYG, VNQ, momentum for liquid alts).
 
 ---
 

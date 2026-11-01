@@ -112,4 +112,4 @@ def record(key, value, fmt = "{:.1%}", note = ""):
 At the end of the notebook: write `outputs/results.json`. Keys are `snake_case` and stable, e.g. `ex3_eq_lower_12m`, `reg_tbill_t_eq`, `s0_sharpe`. Figure IDs are also stable: `fig01_regimes`, `fig02_ex3_bars`, ...
 
 ## 6. Section order
-Matches `context/02` (notebook § = walkthrough step): §0 Setup · §1 Data & hypotheses · §2 Replication · §3 Profits & deficit · §4 Out-of-sample · §5 Allocation · §6 Backtest & simulation · §7 Results export.
+Matches `context/02` (notebook § = walkthrough step): §0 Setup · §1 Data & hypotheses · §2 Replication, in and out of sample · §3 Profits & deficit · §4 Recent years & robustness · §5 What to hold (evidence, strategies, backtests) · §6 Results export.

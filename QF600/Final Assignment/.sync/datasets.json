@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-11-01T17:11:57",
+  "synced_at": "2026-11-01T22:08:31",
   "files": {
     "damodaran_annual.csv": {
       "file": "damodaran_annual.csv",
@@ -811,9 +811,9 @@
       "key": "",
       "source": "Yahoo Finance via `yfinance`: tickers",
       "file": "etf_prices_daily.csv",
-      "sha256": "2d873e46bb8891381a77cd9e81a7e95f2e5c9ab30c897717d543b473154b268c",
-      "size": 987598,
-      "profiled_at": "2026-11-01T17:11:57",
+      "sha256": "e132d3be35ac6a3c6faed238181988406feafd2dcf54b956b37828ac868d4d47",
+      "size": 987391,
+      "profiled_at": "2026-11-01T22:08:31",
       "sheets": [
         {
           "sheet": "",

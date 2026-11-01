@@ -77,15 +77,17 @@ Report sections and slides are indicative. `qf600-report` / `qf600-slides` updat
 
 | Point | Walkthrough step | Notebook § | Report section | Slide(s) |
 |-------|-----------------|-----------|----------------|----------|
-| 1 Paper direction ok | 2 | §2 | 3 Replication | 4–5 |
-| 2 If holds → optimise | 4, 6 | §4, §6 | 5, 7 | 7, 10 |
-| 3 If fails → explain | 4 | §4 | 5 | 7 |
-| 4 Rate increases: 60/40 vs 50/50 | 5, 6 | §5, §6 | 6, 7 | 8, 11 |
-| 5 Out-of-sample | 4, 6 | §4, §6 | 5, 7 | 7, 10 |
-| 6 "i is shrinking" | 5 | §5 | 6 | 8 |
-| 7 MV + central message | 5 | §5 | 6, 8 | 9, 12 |
-| 8 Risky % | 5 | §5 | 6 | 9 |
-| 9 Good / middle / bad | 5 | §5 | 6 | 9 |
-| 10 CVaR | 5, 6 | §5, §6 | 6, 7 (all tables) | 8, 10 |
-| 11 Typical strategies, rising r_f | 5 | §5 | 6 | 8 |
-| 12 Do better | 6 | §6 | 7, 8 | 10–12 |
+| 1 Paper direction ok | 2 | §2 | 3 Replication | 5–6 |
+| 2 If holds → optimise | 2, 5 | §2, §5 | 3, 6 | 7, 14 |
+| 3 If fails → explain | 4 | §4 | 5 | 9 |
+| 4 Rate increases: 60/40 vs 50/50 | 5 | §5 | 6 | 10, 14 |
+| 5 Out-of-sample | 2, 5 | §2, §5 | 3, 6 | 7, 14 |
+| 6 "i is shrinking" | 5 | §5 | 6 | 10 |
+| 7 MV + central message | 5 | §5 | 6, 7 | 11, 16 |
+| 8 Risky % | 5 | §5 | 6 | 11 |
+| 9 Good / middle / bad | 5 | §5 | 6 | 11 |
+| 10 CVaR | 5 | §5 | 6 (all tables) | 10, 14 |
+| 11 Typical strategies, rising r_f | 5 | §5 | 6 | 10, 14 |
+| 12 Do better | 5 | §5 | 6, 7 | 12–16 |
+
+**Deliverables do not cite Prof Liu** (feedback 1 Nov 2026): each point is answered as the group's own analysis and conclusion.
