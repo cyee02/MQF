@@ -1,6 +1,7 @@
 .DS_Store
 .ipynb_checkpoints/
 __pycache__/
+.venv/
 QF627_PreCourse_*.ipynb
 scratch/
 
@@ -9,3 +10,18 @@ QF620/Final Assignment/ETH
 QF620/Final Assignment/RTH
 QF620/Final Assignment/2025 Liberation Day Tariff Main Events.csv
 Project (2026-27 T1).pdf
+
+# Office lock files
+~$*
+
+# Files from reference paper
+QF600/Final Assignment/reference_paper/
+QF600/Final Assignment/course_materials/
+QF600/Final Assignment/credentials.yaml
+
+# QF600 Final Project
+QF600/Final Assignment/datasets/*
+!QF600/Final Assignment/datasets/.gitkeep
+QF600/Final Assignment/*.zip
+QF600/Final Assignment/.sync/backups/
+QF600/Final Assignment/reference_style
