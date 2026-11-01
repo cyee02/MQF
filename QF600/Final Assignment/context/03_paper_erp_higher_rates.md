@@ -27,6 +27,8 @@
 
 ### 2a. Long dataset: Jan 1926 – Dec 2023, monthly (p.4–5, "Long Dataset")
 
+**GFD is not available to us:** SMU has no subscription to Finaeon / Global Financial Data, and the free trial covers only US stocks from 2019. Every GFD series below uses the listed proxy, over the paper's sample (monthly, Jan 1926 – Dec 2023).
+
 | Series | Paper's source | Frequency | Period | Our source (see `context/06`) |
 |--------|---------------|-----------|--------|-------------------------------|
 | 3-month T-bill rate | Federal Reserve from 1934; Global Financial Data (GFD) short rates 1926–1933 | Monthly | 1926–2023 | FRED `TB3MS` (from 1934) + Ken French `RF` (1-month T-bill, from Jul 1926) to back-fill 1926–33 |

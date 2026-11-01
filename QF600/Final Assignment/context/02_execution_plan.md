@@ -11,38 +11,49 @@ Steps 1–4 test whether the paper is right and why. Steps 5–6 turn that into 
 
 ## Hypotheses (fixed before seeing results)
 
+**Part A · Replicate the paper** on the paper's sample (monthly, Jan 1926 – Dec 2023). The paper's main source, Global Financial Data (Finaeon), isn't available: SMU has no subscription, so we use free proxies (`context/06`).
+
 | ID | Hypothesis | Source |
 |----|-----------|--------|
-| **H1** | When rates are high, stocks earn less above cash, and less per unit of risk (lower Sharpe). | Paper, Key Findings p.1 |
-| **H2** | Strategies that keep their money in T-bills while trading (**momentum, UMD**) earn about the same above cash whether rates are high or low. | Paper, Key Findings p.1 |
-| **H3** | When the government runs a big deficit, company profits keep growing even with high rates, so stocks suffer less. | **Ours** (Kalecki profits identity) |
+| **H0** | The level of the T-bill rate makes no difference: stocks earn the same above cash after high-rate months as after low-rate months. | Null hypothesis (ours) |
+| **H1** | After high-rate months, stocks earn less above cash (the paper's claim). | Paper, Key Findings p.1 |
+
+**Part B · Test whether the paper's conclusion holds up**, using the Sharpe ratio and the fiscal deficit.
+
+| ID | Hypothesis | Source |
+|----|-----------|--------|
+| **H2** | Sharpe ratio: once risk is counted, high rates don't hurt stocks much. The equity Sharpe ratio after high-rate months is not materially lower than after low-rate months (paper: 0.57 vs 0.31). Tested on 1926–2023 and on the extension to 2026. | Ours, challenging paper p.6 "Economic drivers" |
+| **H3** | Fiscal-deficit offset: when the government runs a big deficit, company profits keep growing even with high rates, so stocks' return above cash after high-rate months is not lower when the deficit is big. | Ours (Kalecki profits identity) |
+
+The paper's momentum claim (momentum / cash-plus earns about the same above cash in both regimes, Key Findings p.1) is **not a separate hypothesis**: it is a replication check in step 2 and feeds the cash-plus discussion in steps 5–6 (momentum is one of the four benchmark assets).
 
 ---
 
-## Step 1 · Collect the data and register predictions
-**Do:** collect Ken French (market, RF, UMD), FRED (T-bill, 10-yr, corporate yields, deficit), Shiller (earnings, CAPE), Damodaran annual returns 1928–2025, ETF prices from 2005. Record H1–H3.
-**Proves:** our data matches the paper's sources (e.g. our computed bond returns line up with Damodaran's published ones).
-**Conclude:** the tests are fair because predictions were fixed first.
-**Paper:** data p.4–5 "Long Dataset"; H1/H2 p.1. H3 is ours.
+## Step 1 · Collect the data and register the hypotheses
+**Do:** collect Ken French (market, RF, UMD), FRED (T-bill, 10-yr, corporate yields, deficit), Shiller (earnings, CAPE), Damodaran annual returns 1928–2025, ETF prices from 2005. GFD isn't available (no SMU subscription), so these are proxies over the paper's period. Record H0–H3 in two parts (A: H0/H1, B: H2/H3).
+**Proves:** our proxy data matches the paper's sources closely enough (e.g. our computed bond returns line up with Damodaran's published ones). State where proxies differ from GFD.
+**Conclude:** the tests are fair because the hypotheses were fixed first. Part A says whether the paper's result is real; Part B says whether it should change what an investor holds.
+**Paper:** data p.4–5 "Long Dataset"; H1 p.1; Sharpe 0.57 vs 0.31 p.6 "Economic drivers". H0 (null), H2 (as a challenge) and H3 are ours.
 **Notebook section:** §1 Data. **Datasets:** `context/06`.
 
-## Step 2 · Replicate the paper's main results
+## Step 2 · Replicate the paper (H0 vs H1) and test the Sharpe ratio (H2)
 **Do:**
 1. Label each month higher/lower-rate with the three rules (M1 full-sample median; M2 trailing 5-yr at 40th pct; M3 centred 5-yr). Rates < 0.5% always lower. **Only M2 may be used by strategies** (no look-ahead).
-2. For stocks, Treasuries, corporate bonds and momentum: average return above cash and Sharpe ratio over the next 1, 12, 36 months, higher vs lower regime → **Exhibit 3**.
+2. For stocks, Treasuries, corporate bonds and momentum: average return above cash and Sharpe ratio over the next 1, 12, 36 months, higher vs lower regime → **Exhibit 3**. **Test H0 vs H1** with a difference-in-means t-test, Newey-West standard errors (rate levels persist, p.5). **Momentum check:** momentum's return above cash should be about the same in both groups (backs cash-plus, steps 5–6).
 3. Regression: excess return_{t+1} on T-bill_t (paper t = −2.2 equities, −2.4 credit).
-4. Recompute **Exhibit 9** portfolios from the stated assumptions.
-**Proves:** H1, H2, and that our method reproduces the paper.
-**First pass (Damodaran):** stocks 9.1%/yr above cash after low-rate years vs 6.7% after high (paper 10.3% vs 5.8%). Same direction, smaller gap.
+4. **H2:** equity Sharpe ratio after high- vs low-rate months (paper 0.57 vs 0.31) on 1926–2023, then 1926–2026; significance of the gap by bootstrap.
+5. Recompute **Exhibit 9** portfolios from the stated assumptions.
+**Proves:** H0 vs H1 (does the paper's result hold on its sample?), H2 (is the gap still there once risk is counted?), and that our method reproduces the paper.
+**Conclude:** if H0 is rejected, the pattern really existed in 1926–2023. First pass (Damodaran): stocks 9.1%/yr above cash after low-rate years vs 6.7% after high (paper 10.3% vs 5.8%); same direction, smaller gap. If the Sharpe gap is small (H2 holds), the paper overstates the case for cutting stocks.
 **Answers Prof Liu:** point 1.
-**Paper:** p.4 rules; fn 4 p.4; p.5 Dec 2023; p.6 Exhibit 3; p.5 t-stats; p.12–13 Exhibit 9.
+**Paper:** p.4 rules; fn 4 p.4; p.5 Dec 2023; p.6 Exhibit 3; p.6 Sharpe 0.57 vs 0.31, vol 19.4% vs 17.4%; p.5 t-stats; p.12–13 Exhibit 9.
 
-## Step 3 · Test why: profits and the deficit
+## Step 3 · Test the fiscal-deficit offset (H3)
 **Do:**
 1. Check the paper's channel: real EPS growth after low rates **11%/yr** vs **1%** after high (p.6).
-2. Split higher/lower months again by **deficit** (big = above its median *to date*). Compare next-12-month earnings growth and stock returns in the 4 groups.
-**Proves:** H3.
-**Conclude:** if yes, high rates alone aren't a reason to sell stocks; may explain 2024–25 (high rates, deficit ≈ 6% of GDP) → strategy **S3**. If no, the paper's channel stands.
+2. Split higher/lower months again by the **primary deficit** (deficit minus interest, % of GDP, FRED; big = above its median *to date*). Compare next-12-month earnings growth and stock returns in the 4 groups. **H3 holds** if, after high-rate months, stocks' return above cash and earnings growth are higher when the deficit is big than when small, and close to the low-rate level.
+**Proves:** H3: whether a big deficit offsets high rates, keeping profits and stock returns up.
+**Conclude:** if yes, high rates alone aren't a reason to sell stocks; may explain 2024–25 (high rates, deficit ≈ 6% of GDP) → strategy **S3**. If no, the paper's explanation stands (H1 with no offset).
 **Paper:** p.6 "blistering 11%"; p.7 "Intuitively, it is low". Deficit split and Kalecki are ours.
 
 ## Step 4 · Out-of-sample and robustness
@@ -57,6 +68,7 @@ Steps 1–4 test whether the paper is right and why. Steps 5–6 turn that into 
 
 ## Step 5 · What should an investor hold
 **Do:**
+0. **Data:** longest sample available, monthly Feb 1960 → latest (World Bank gold starts Jan 1960). Equity = Ken French market; bonds = 10Y Treasury return built from the yield (annual corr with Damodaran 0.99); gold = World Bank monthly price; momentum = RF + UMD. Gold fixed at $35 until Aug 1971; kept and disclosed. Notebook §5.
 1. Which assets still diversify stocks when rates are high, rising, falling: **Treasuries, gold, momentum**.
 2. Mean-variance stock share by regime: **w\* = (E[R] − r_f) / (A · σ²)** (Lecture 2).
 3. Compare **100% stocks, 70/30, 60/40, 50/50 (stocks/bonds), 1/N** in **rising, high-and-steady, falling** rate periods. Metrics: return, volatility, Sharpe, max drawdown, **CVaR 5%**.
@@ -69,22 +81,22 @@ Steps 1–4 test whether the paper is right and why. Steps 5–6 turn that into 
 
 ## Step 6 · Backtest strategies and give the verdict
 **Do:**
-1. **Walk-forward:** choose weights from the previous 10 years, hold 1 year, roll forward; subtract trading costs.
+1. **Investable ETF backtest, 70/30 chronological split:** SPY, IEF, GLD, PDP (+ PSP, HYG, VNQ for S1), monthly May 2007 → latest. Fit/choose on the first 70% (May 2007 – Nov 2020), judge only on the last 30% (Dec 2020 – Sep 2026, includes the 2022–26 high-rate period). Monthly rebalance, 10 bps costs. Notebook §6.
 2. **Monte Carlo** 10-year paths under "rates stay high" vs "rates fall", with high↔low switching odds counted from history (CVaR paper Algorithm 2, `context/04`).
 
 | Code | Strategy | Rule |
 |------|----------|------|
-| **S0** | 60/40 | 60% stocks / 40% Treasuries always. Benchmark (Prof's example) |
-| **S1** | Equal weights | 1/N across all assets |
-| **S2** | Rate rule | 70% stocks when M2 = lower; 50% when higher (paper's direction) |
-| **S3** | Rate + deficit | Like S2, but stay at 60% when rates high **and** deficit big (H3) |
-| **S4** | Optimised by period | Mean-variance weights from each regime's history, **ridge** shrinkage (Week 5) |
-| **S5** | Cash-plus | Like S2, but stocks sold in high-rate periods go to **momentum** (RF + UMD) instead of bonds |
-| **S6** | Paper's portfolios | Exhibit 9 column 2 when rates low, column 4 when high (ETF proxies) |
+| **B** | Benchmark | Equal amounts in SPY, IEF, GLD, PDP, bought once and **never rebalanced**; restarted at equal weights at the start of each period (in-sample, out-of-sample) |
+| **S1** | The paper's portfolios (reference) | Exhibit 9 column 2 when rates are low, column 4 when high (SPY, PSP, IEF, HYG, VNQ, PDP for cash-plus) |
+| **S2** | Rate rule | 70% SPY / 30% IEF when rates are low (M2), 50/50 when high (the paper's direction) |
+| **S3** | Rate + deficit | Like S2, but 60/40 when rates are high **and** the primary deficit is big (H3) |
+| **S4** | Optimised by period | Ridge mean-variance weights on SPY, IEF, GLD, PDP from each regime's **in-sample** history (Week 5) |
+
+Summary table per period (in-sample / out-of-sample), as in Assignment 1: **alpha and beta vs the benchmark** (Newey-West t), annual return, annual variance, Sharpe ratio, CVaR 5% (monthly), max drawdown. Dropped: 60/40 (S0), rebalanced 1/N, cash-plus (old S5) and SPY-only. Prof Liu's 60/40 vs 50/50 question is answered in step 5 instead.
 
 **Conclude:** final verdict on the paper and one **central message**: *"Being in the middle doesn't mean retreating to risk-free … the best stock share is around X%."* Rewrite if the evidence says otherwise. **Beating 60/40 is not required**: an honest "no" is valid.
-**Answers Prof Liu:** points 2, 4, 10, 12.
-**Paper:** p.13 Exhibit 9; p.12 four scenarios; fn 11 Sharpe 0.45/0.36/0.44/0.35; p.14 "more—not less—attractive". CVaR paper: p.17 counting; p.1 beats 1/N. S1–S5 and the simulation are ours.
+**Answers Prof Liu:** points 2, 4, 10, 12. Beating the benchmark is not required.
+**Paper:** p.13 Exhibit 9; p.12 four scenarios; fn 11 Sharpe 0.45/0.36/0.44/0.35; p.14 "more—not less—attractive". CVaR paper: p.17 counting; p.1 1/N benchmark. B, S2–S4 and the simulation are ours; S1 is the paper's Exhibit 9.
 
 ---
 
@@ -99,7 +111,7 @@ Steps 1–4 test whether the paper is right and why. Steps 5–6 turn that into 
 | Cash-plus / liquid alts | Daily-traded hedge-fund-style funds (trend, market-neutral) holding mostly T-bills. Momentum is our stand-in |
 | Kalecki identity | Profits = Investment − Household saving + Government deficit + Net exports + Dividends |
 | Primary deficit | Deficit excluding interest. Used because high rates mechanically raise interest costs |
-| Exhibit 9 portfolios | Low-rate: 37% stocks, 17% PE, 18% Treasuries, 10% RE, 19% cash-plus. High-rate: 26% stocks, 10% PE, 33% Treasuries, 3% HY, 28% cash-plus. ETFs from 2007: SPY, PSP, IEF, HYG, VNQ, momentum |
+| Exhibit 9 portfolios | Low-rate: 37% stocks, 17% PE, 18% Treasuries, 10% RE, 19% cash-plus. High-rate: 26% stocks, 10% PE, 33% Treasuries, 3% HY, 28% cash-plus. ETFs from 2007: SPY, PSP, IEF, HYG, VNQ, PDP (momentum) |
 | Gold | Low correlation with stocks; held up in 2022. Pays no interest, so looks worse when cash pays well |
 | CAPE | S&P 500 price / 10-yr average real earnings. 15–20 typical; > 30 expensive |
 | Sharpe vs certainty equivalent | Any stock/cash mix has the same Sharpe, so Sharpe can't size the stock share. CE (Week 1) can |
@@ -110,8 +122,8 @@ Steps 1–4 test whether the paper is right and why. Steps 5–6 turn that into 
 | Week | Concept | Used in |
 |------|---------|---------|
 | W1 | Risk aversion, certainty equivalent | Step 5 stock share |
-| W2 | Sharpe, CAL/CML, tangency, w\* = (E[R] − r_f)/(Aσ²) | H1, H2, Exhibit 9, steps 2 and 5 |
-| W3 | Regression, t-tests, beta, alpha | Paper regressions, H3, strategy alphas (steps 2–4, 6) |
+| W2 | Sharpe, CAL/CML, tangency, w\* = (E[R] − r_f)/(Aσ²) | H2, Exhibit 9, steps 2 and 5 |
+| W3 | Regression, t-tests, beta, alpha | H0 vs H1 test, paper regressions, H3, strategy alphas (steps 2–4, 6) |
 | W4 | Momentum (UMD); four tests for a new signal | Cash-plus; are the rate/deficit signals real (steps 2, 4, 6) |
 | W5 | Ridge, 1/N, estimation error, trading costs | S1, S4, Exhibit 9 sensitivity, after-cost backtests (steps 2, 6) |
 | W6 (optional) | SDF, E[M] = 1/R_f | One paragraph on why the premium can move with rates |
@@ -129,8 +141,8 @@ Details and slide refs: `context/05`.
 |------|-----------|----------------|---------------------|
 | — | §0 Setup | — | — |
 | 1 | §1 Data & hypotheses | 2 Data; Annex A | 2 |
-| 2 | §2 Replication | 3 Replication | 3–4 |
-| 3 | §3 Profits & deficit | 4 Mechanism | 5 |
+| 2 | §2 Replication (H0 vs H1, H2) | 3 Replication | 3–4 |
+| 3 | §3 Deficit offset (H3) | 4 Mechanism | 5 |
 | 4 | §4 Out-of-sample | 5 Does it still hold? | 6–7 |
 | 5 | §5 Allocation | 6 What to hold | 8–9 |
 | 6 | §6 Backtest & simulation | 7 Strategies; 8 Verdict | 10–11 |

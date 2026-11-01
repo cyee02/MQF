@@ -128,8 +128,17 @@ def docx_replace_figure(doc, fig_id: str, png: Path) -> bool:
 
 def docx_sections(doc) -> dict[str, str]:
     """Heading text -> body text under it (for free-text diffs)."""
+    from docx.table import Table
+    from docx.text.paragraph import Paragraph
     out, cur, buf = {}, "_preamble", []
-    for p in doc.paragraphs:
+    for el in doc.element.body.iterchildren():
+        if el.tag == qn("w:tbl"):                       # tables count as text of the section they sit in
+            t = Table(el, doc)
+            buf.extend(" | ".join(c.text for c in row.cells) for row in t.rows)
+            continue
+        if el.tag != qn("w:p"):
+            continue
+        p = Paragraph(el, doc)
         if p.style is not None and p.style.name.startswith("Heading"):
             out[cur] = "\n".join(buf).strip()
             cur, buf = p.text.strip(), []
@@ -232,10 +241,13 @@ def script_slides(doc) -> list[dict]:
     for p in doc.paragraphs:
         t = p.text.strip()
         m = SCRIPT_HEAD.match(t)
-        if m and p.style.name.startswith("Heading"):
-            cur = {"n": int(m[1]), "title": m[2].strip(), "speaker": None,
-                   "start": None, "end": None, "text": [], "clicks": 0}
-            out.append(cur)
+        if p.style.name.startswith("Heading"):
+            if m:
+                cur = {"n": int(m[1]), "title": m[2].strip(), "speaker": None,
+                       "start": None, "end": None, "text": [], "clicks": 0}
+                out.append(cur)
+            else:
+                cur = None          # e.g. a "Presenter 2" group heading: not part of any slide
             continue
         if cur is None:
             continue

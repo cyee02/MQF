@@ -20,7 +20,11 @@ import re
 import sys
 from pathlib import Path
 
+import warnings
+
 import pandas as pd
+
+warnings.filterwarnings("ignore", message="Could not infer format")
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "datasets"
@@ -146,7 +150,7 @@ def render_md(reg: dict) -> str:
     lines += ["## Summary", "", "| # | File | Description | Source | Frequency | Period | Rows | Columns |",
               "|---|------|-------------|--------|-----------|--------|------|---------|"]
     for i, (fn, f) in enumerate(sorted(files.items()), 1):
-        sh = (f.get("sheets") or [{}])[0]
+        sh = max(f.get("sheets") or [{}], key=lambda x: x.get("rows", 0))  # main sheet, not the cover sheet
         period = f"{sh.get('start', '—')} → {sh.get('end', '—')}"
         lines.append(f"| {i} | `{fn}` | {f.get('description', '—')} | {f.get('provider', '—')} | "
                      f"{sh.get('frequency', f.get('frequency_registry', '—'))} | {period} | "
