@@ -6,7 +6,7 @@ Datasets used by `03 - execution_script_group_6.ipynb`. Script-downloaded files 
 
 <!-- AUTO:BEGIN data_sync -->
 
-_Last synced: 2026-11-01T17:11:57 · 18 dataset(s)._
+_Last synced: 2026-11-01T22:08:31 · 18 dataset(s)._
 
 ## Summary
 
@@ -271,7 +271,7 @@ _Last synced: 2026-11-01T17:11:57 · 18 dataset(s)._
 - **Provider:** Yahoo Finance via `yfinance`
 - **Source / link:** tickers
 - **How obtained:** script
-- **File size:** 988 KB · sha256 `2d873e46bb88`
+- **File size:** 987 KB · sha256 `e132d3be35ac`
 
 **Shape:** 6,248 rows × 10 columns · daily · 2002-01-02 → 2026-10-30
 

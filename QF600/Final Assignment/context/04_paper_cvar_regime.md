@@ -22,11 +22,11 @@ The paper's frequency-based approach pre-labels regimes from **covariates**: eit
 a_{j,k} = #(months in regime j followed by regime k) / #(months in regime j), rows sum to 1.
 The next-period regime weights are the row of the **last observed regime**: w_k = a_{j*,k}.
 Worked example (p.17): sequence {1,2,1,1,1,2,2,1,2,1} gives A = [[0.4, 0.6], [0.75, 0.25]].
-→ **Ours:** estimate a 2×2 (higher/lower) matrix from the history of M2 labels; use it to simulate 10-year paths for "rates stay high" vs "rates fall" (step 6 Monte Carlo).
+→ **Ours:** estimate a 2×2 (higher/lower) matrix from the history of M2 labels; use it to simulate 10-year paths for "rates stay high" vs "rates fall" (step 5 Monte Carlo).
 
 ### 4. Rolling-sample backtest (p.14)
 DeMiguel et al. (2009) "rolling-sample" approach: estimate on months t … t+N−1, hold in month t+N, roll forward one month. They use N = 120 months (DeMiguel datasets) and N = 36 months (multi-asset dataset) (p.ec11).
-→ **Ours:** train on the previous 10 years, hold 1 year, roll forward (step 6), net of trading costs.
+→ **Ours:** train on the previous 10 years, hold 1 year, roll forward (step 5), net of trading costs.
 
 ### 5. 1/N as the benchmark; robust optimisation → 1/N (p.14, Proposition 2)
 "When Σ_k w_k θ_k → ∞, the solution of the DRO problem ... **converges to the equally weighted portfolio**." Same message as Lecture 5: with no trustworthy return estimates, maximal robustness = 1/N. EW is "a robust choice that is hard to beat" (p.24, citing DeMiguel et al. 2009).

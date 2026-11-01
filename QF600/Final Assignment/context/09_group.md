@@ -17,12 +17,12 @@ Until the user confirms, **all deliverables use the placeholders `Presenter 1` �
 
 | Placeholder | Member | Owns (walkthrough steps / slides) | Time |
 |-------------|--------|-----------------------------------|------|
-| Presenter 1 | _TBC_ | Problem, data, hypotheses (step 1) · title + slides 2–3 | 0:00–3:10 |
-| Presenter 2 | _TBC_ | Replication (step 2) | 3:10–6:20 |
-| Presenter 3 | _TBC_ | Mechanism + out-of-sample (steps 3–4) | 6:20–9:30 |
-| Presenter 4 | _TBC_ | What to hold (step 5) | 9:30–12:40 |
-| Presenter 5 | _TBC_ | Strategies, verdict, conclusion (step 6) | 12:40–15:50 |
-| — | All | Q&A | 15:50–20:00 |
+| Presenter 1 | _TBC_ | Problem, the paper, data, hypotheses (step 1) · slides 1–4 | 0:00–3:10 |
+| Presenter 2 | _TBC_ | Replication, in/out of sample (step 2) · slides 5–7 | 3:10–6:30 |
+| Presenter 3 | _TBC_ | Mechanism, recent years (steps 3–4) · slides 8–9 | 6:30–9:00 |
+| Presenter 4 | _TBC_ | What to hold, findings → strategies (step 5) · slides 10–12 | 9:00–12:00 |
+| Presenter 5 | _TBC_ | Backtests, verdict, conclusion (step 5) · slides 13–19 | 12:00–16:00 |
+| — | All | Q&A | 16:00–20:00 |
 
 The slide split is indicative; `qf600-slides` keeps it in step with the deck.
 
