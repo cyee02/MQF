@@ -77,15 +77,15 @@ Report sections and slides are indicative. `qf600-report` / `qf600-slides` updat
 
 | Point | Walkthrough step | Notebook § | Report section | Slide(s) |
 |-------|-----------------|-----------|----------------|----------|
-| 1 Paper direction ok | 2 | §2 | 3 Replication | 3–4 |
-| 2 If holds → optimise | 4, 6 | §4, §6 | 5, 7 | 6, 10 |
+| 1 Paper direction ok | 2 | §2 | 3 Replication | 4–5 |
+| 2 If holds → optimise | 4, 6 | §4, §6 | 5, 7 | 7, 10 |
 | 3 If fails → explain | 4 | §4 | 5 | 7 |
-| 4 Rate increases: 60/40 vs 50/50 | 5, 6 | §5, §6 | 6, 7 | 8, 10 |
-| 5 Out-of-sample | 4 | §4 | 5 | 6 |
+| 4 Rate increases: 60/40 vs 50/50 | 5, 6 | §5, §6 | 6, 7 | 8, 11 |
+| 5 Out-of-sample | 4, 6 | §4, §6 | 5, 7 | 7, 10 |
 | 6 "i is shrinking" | 5 | §5 | 6 | 8 |
 | 7 MV + central message | 5 | §5 | 6, 8 | 9, 12 |
 | 8 Risky % | 5 | §5 | 6 | 9 |
 | 9 Good / middle / bad | 5 | §5 | 6 | 9 |
-| 10 CVaR | 5, 6 | §5, §6 | 6, 7 (all tables) | 10 |
+| 10 CVaR | 5, 6 | §5, §6 | 6, 7 (all tables) | 8, 10 |
 | 11 Typical strategies, rising r_f | 5 | §5 | 6 | 8 |
-| 12 Do better | 6 | §6 | 7, 8 | 10–11 |
+| 12 Do better | 6 | §6 | 7, 8 | 10–12 |

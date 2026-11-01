@@ -10,21 +10,29 @@ Registry of every dataset the project uses. **`qf600-data-sync` keeps this file,
 
 ## Core datasets
 
+All script datasets are downloaded by notebook §1 (`03 - execution_script_group_6.ipynb`). Series IDs and URLs were verified on 01 Nov 2026.
+
 | ID | Dataset | Provider | Series / URL | Freq | Period needed | Method | Key | Expected file | Status |
 |----|---------|----------|--------------|------|---------------|--------|-----|---------------|--------|
-| D01 | 3-month T-bill rate (secondary market) | FRED | `TB3MS` | Monthly | 1934-01 → latest | script | `fred_key` | `fred_tb3ms.csv` | planned |
-| D02 | Fama-French 3 factors (Mkt-RF, SMB, HML, **RF**) | Ken French Data Library | `https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip` | Monthly | 1926-07 → latest | script | — | `ff3_monthly.csv` | planned |
-| D03 | Momentum factor (**UMD** / Mom) | Ken French Data Library | `…/ftp/F-F_Momentum_Factor_CSV.zip` | Monthly | 1927-01 → latest | script | — | `ff_umd_monthly.csv` | planned |
-| D04 | 10-year Treasury yield | FRED | `GS10` | Monthly | 1953-04 → latest | script | `fred_key` | `fred_gs10.csv` | planned |
-| D05 | Moody's Aaa / Baa corporate yields | FRED | `AAA`, `BAA` | Monthly | 1919-01 → latest | script | `fred_key` | `fred_aaa_baa.csv` | planned |
-| D06 | Federal surplus/deficit, % of GDP | FRED | `FYFSGDA188S` ⚠ | Annual (fiscal yr) | 1929 → latest | script | `fred_key` | `fred_deficit_gdp.csv` | planned |
-| D07 | Federal interest outlays, % of GDP (for primary deficit) | FRED | `FYOIGDA188S` ⚠ | Annual | 1940 → latest | script | `fred_key` | `fred_interest_gdp.csv` | planned |
-| D08 | Monthly Treasury statement surplus/deficit (recent detail) | FRED | `MTSDS133FMS` ⚠ | Monthly | 1980 → latest | script | `fred_key` | `fred_mts_deficit.csv` | planned |
-| D09 | CPI (all urban, NSA) | FRED | `CPIAUCNS` | Monthly | 1913 → latest | script | `fred_key` | `fred_cpi.csv` | planned |
-| D10 | S&P composite price, dividends, earnings, real EPS, **CAPE** | Robert Shiller | `ie_data.xls` ⚠ (shillerdata.com / econ.yale.edu/~shiller/data) | Monthly | 1871 → latest | manual | — | `shiller_ie_data.xls` | planned |
-| D11 | Historical annual returns: S&P 500, 3M T-bill, 10Y T-bond, Baa corp, real estate, gold | Aswath Damodaran (NYU Stern) | `https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls` ⚠ | Annual | 1928 → 2025 | manual | — | `damodaran_histretSP.xls` | **pending-user** |
-| D12 | ETF adjusted closes: SPY, IEF, TLT, HYG, VNQ, PSP, GLD, RSP | Yahoo Finance via `yfinance` | tickers | Daily → resample monthly | 2005-01 → latest (HYG from 2007-04) | script | — | `etf_prices_daily.csv` | planned |
-| D13 | Global Financial Data (Finaeon) | GFD | API | — | — | — | — | — | **pending-user** (decide whether used; notebook has a trial-login cell) |
+| D01 | 3-month T-bill rate, secondary market (annualised %) | FRED | `TB3MS` | Monthly | 1934-01 → latest | script | `fred_key` | `fred_tb3ms.csv` | downloaded |
+| D02 | Fama-French 3 factors: Mkt-RF, SMB, HML, RF (% per month) | Ken French Data Library | `https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip` | Monthly | 1926-07 → latest | script | — | `ff3_monthly.csv` | downloaded |
+| D03 | Momentum factor UMD (% per month) | Ken French Data Library | `https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_CSV.zip` | Monthly | 1927-01 → latest | script | — | `ff_umd_monthly.csv` | downloaded |
+| D04 | 10-year Treasury constant-maturity yield (%) | FRED | `GS10` | Monthly | 1953-04 → latest | script | `fred_key` | `fred_gs10.csv` | downloaded |
+| D05 | Moody's seasoned Aaa and Baa corporate bond yields (%) | FRED | `AAA`, `BAA` | Monthly | 1919-01 → latest | script | `fred_key` | `fred_aaa_baa.csv` | downloaded |
+| D06 | Federal surplus or deficit (−), % of GDP, fiscal year | FRED | `FYFSGDA188S` | Annual | 1929 → latest | script | `fred_key` | `fred_deficit_gdp.csv` | downloaded |
+| D07 | Federal interest outlays, % of GDP (for primary deficit) | FRED | `FYOIGDA188S` | Annual | 1940 → latest | script | `fred_key` | `fred_interest_gdp.csv` | downloaded |
+| D08 | Monthly Treasury statement surplus or deficit (−), $ millions | FRED | `MTSDS133FMS` | Monthly | 1980-10 → latest | script | `fred_key` | `fred_mts_deficit.csv` | downloaded |
+| D09 | CPI, all urban consumers, not seasonally adjusted | FRED | `CPIAUCNS` | Monthly | 1913 → latest | script | `fred_key` | `fred_cpi.csv` | downloaded |
+| D10 | S&P composite P, D, E, CPI, real EPS, CAPE (parsed from ie_data.xls) | Robert Shiller | `https://shillerdata.com/` (link to ie_data.xls found on the page; the Yale copy stopped in 2023) | Monthly | 1871 → latest | script | — | `shiller_monthly.csv` | downloaded |
+| D11 | Shiller raw workbook | Robert Shiller | `https://shillerdata.com/` → `ie_data.xls` | Monthly | 1871 → latest | script | — | `shiller_ie_data.xls` | downloaded |
+| D12 | Annual returns: S&P 500, small cap, 3M T-bill, 10Y T-bond, Baa corporate, real estate, gold (parsed) | Aswath Damodaran (NYU Stern) | `https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls` (sheet "Returns by year") | Annual | 1928 → 2025 | script | — | `damodaran_annual.csv` | downloaded |
+| D13 | Damodaran raw workbook | Aswath Damodaran (NYU Stern) | `https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls` | Annual | 1928 → 2025 | script | — | `damodaran_histretSP.xls` | downloaded |
+| D14 | ETF adjusted closes: SPY, IEF, TLT, HYG, VNQ, PSP, GLD, RSP, PDP (momentum, from 2007-03) | Yahoo Finance via `yfinance` | tickers | Daily | 2002-01 → latest (HYG from 2007-04) | script | — | `etf_prices_daily.csv` | downloaded |
+| D15 | 3-month Treasury constant-maturity yield (annualised %) | FRED | `DGS3MO` | Daily | 1981-09 → latest | script | `fred_key` | `fred_dgs3mo.csv` | downloaded |
+| D16 | Nominal GDP, $ billions | FRED | `GDPA` | Annual | 1929 → latest | script | `fred_key` | `fred_gdp.csv` | downloaded |
+| D19 | Global Financial Data (Finaeon) | GFD | API (paid licence) | — | — | — | — | — | **dropped**: SMU has no Finaeon subscription; trial covers US stocks from 2019 only |
+| D20 | Gold price, $/troy oz (parsed from the Pink Sheet) | World Bank Commodity Price Data (Pink Sheet) | `https://www.worldbank.org/en/research/commodity-markets` → `CMO-Historical-Data-Monthly.xlsx`, sheet "Monthly Prices" | Monthly | 1960-01 → latest | script | — | `wb_gold_monthly.csv` | downloaded |
+| D21 | World Bank Pink Sheet raw workbook | World Bank Commodity Price Data (Pink Sheet) | as D20 | Monthly | 1960-01 → latest | script | — | `wb_cmo_monthly.xlsx` | downloaded |
 
 ## Proxies vs the paper (see `context/03` §2)
 

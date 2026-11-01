@@ -67,7 +67,7 @@ def setup_state() -> dict:
     code = notebook_code()
     scripts = {p.name: p.read_text() for p in (ROOT / "scripts").glob("*.py")}
     all_code = code + "\n" + "\n".join(scripts.values())
-    keys = sorted(set(re.findall(r"creds\[\s*[\"'](\w+)[\"']\s*\]", all_code)))
+    keys = sorted(set(re.findall(r"creds(?:\[\s*|\.get\(\s*)[\"'](\w+)[\"']", all_code)))
     ex_keys = sorted(re.findall(r"^(\w+)\s*:", CREDS_EX.read_text(), re.M)) if CREDS_EX.exists() else []
     readme = README.read_text() if README.exists() else ""
     local = {p.stem for p in (ROOT / "scripts").glob("*.py")}

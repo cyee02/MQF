@@ -1,4 +1,2120 @@
 {
-  "synced_at": "2026-11-01T12:16:57",
-  "files": {}
+  "synced_at": "2026-11-01T17:11:57",
+  "files": {
+    "damodaran_annual.csv": {
+      "file": "damodaran_annual.csv",
+      "sha256": "49805d1b909f8262ec6dd01b0fbfc27d4f1a2b564ec222954ff44efc570b1a79",
+      "size": 12735,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 98,
+          "n_columns": 8,
+          "columns": [
+            {
+              "name": "Year",
+              "dtype": "int64",
+              "missing": 0
+            },
+            {
+              "name": "SP500",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "SmallCap",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "TBill_3M",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "TBond_10Y",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Baa_Corp",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "RealEstate",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Gold",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Year",
+          "start": "1928-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        }
+      ],
+      "id": "D12",
+      "description": "Annual returns: S&P 500, small cap, 3M T-bill, 10Y T-bond, Baa corporate, real estate, gold (parsed)",
+      "provider": "Aswath Damodaran (NYU Stern)",
+      "url": "https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls (sheet \"Returns by year\")",
+      "frequency_registry": "Annual",
+      "period_needed": "1928 \u2192 2025",
+      "method": "script",
+      "key": "",
+      "source": "Aswath Damodaran (NYU Stern): https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls (sheet \"Returns by year\")"
+    },
+    "damodaran_histretSP.xls": {
+      "file": "damodaran_histretSP.xls",
+      "sha256": "28b8110916a15a4dcc11c87c6422510704608ddedcdfa67a1298abdc22e49c69",
+      "size": 527872,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "Explanations and FAQ",
+          "rows": 17,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "End Game",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "My objective in this spreadsheet is to compute the annual returns you would have earned on major financial asset classses, on an annual basis, inclusive of both cash payout during the year and the price appreciation.",
+              "dtype": "object",
+              "missing": 2
+            }
+          ]
+        },
+        {
+          "sheet": "Returns by year",
+          "rows": 127,
+          "n_columns": 37,
+          "columns": [
+            {
+              "name": "Date updated:",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "2026-01-01 00:00:00",
+              "dtype": "object",
+              "missing": 15
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 22
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 20
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 16
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 22
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "object",
+              "missing": 22
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 26
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 11",
+              "dtype": "object",
+              "missing": 18
+            },
+            {
+              "name": "Unnamed: 12",
+              "dtype": "object",
+              "missing": 20
+            },
+            {
+              "name": "Unnamed: 13",
+              "dtype": "object",
+              "missing": 23
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "object",
+              "missing": 24
+            },
+            {
+              "name": "Unnamed: 15",
+              "dtype": "object",
+              "missing": 27
+            },
+            {
+              "name": "Unnamed: 16",
+              "dtype": "object",
+              "missing": 18
+            },
+            {
+              "name": "Unnamed: 17",
+              "dtype": "object",
+              "missing": 24
+            },
+            {
+              "name": "Unnamed: 18",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 19",
+              "dtype": "object",
+              "missing": 60
+            },
+            {
+              "name": "Unnamed: 20",
+              "dtype": "object",
+              "missing": 19
+            },
+            {
+              "name": "Unnamed: 21",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 22",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 23",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 24",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 25",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 26",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 27",
+              "dtype": "object",
+              "missing": 21
+            },
+            {
+              "name": "Unnamed: 28",
+              "dtype": "object",
+              "missing": 27
+            },
+            {
+              "name": "Unnamed: 29",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 30",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 31",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 32",
+              "dtype": "object",
+              "missing": 28
+            },
+            {
+              "name": "Unnamed: 33",
+              "dtype": "object",
+              "missing": 23
+            },
+            {
+              "name": "Unnamed: 34",
+              "dtype": "object",
+              "missing": 24
+            },
+            {
+              "name": "Unnamed: 35",
+              "dtype": "object",
+              "missing": 27
+            },
+            {
+              "name": "Unnamed: 36",
+              "dtype": "object",
+              "missing": 28
+            }
+          ]
+        },
+        {
+          "sheet": "S&P 500 & Raw Data",
+          "rows": 100,
+          "n_columns": 11,
+          "columns": [
+            {
+              "name": "Unnamed: 0",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "object",
+              "missing": 1
+            }
+          ],
+          "date_column": "Unnamed: 0",
+          "start": "1927-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Small Cap",
+          "rows": 98,
+          "n_columns": 4,
+          "columns": [
+            {
+              "name": "Year",
+              "dtype": "int64",
+              "missing": 0
+            },
+            {
+              "name": "Return",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 97
+            }
+          ],
+          "date_column": "Year",
+          "start": "1928-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "T. Bond yield & return",
+          "rows": 103,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "Bond used: ",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "US treasury 10-year bond at end of each year",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 4
+            }
+          ],
+          "date_column": "Bond used: ",
+          "start": "1927-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "T. Bill rates",
+          "rows": 100,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "FRED Graph Observations",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "float64",
+              "missing": 8
+            }
+          ],
+          "date_column": "FRED Graph Observations",
+          "start": "1934-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Inflation Rate",
+          "rows": 120,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "FRED Graph Observations",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "float64",
+              "missing": 8
+            }
+          ],
+          "date_column": "FRED Graph Observations",
+          "start": "1914-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Summary for ppt",
+          "rows": 8,
+          "n_columns": 10,
+          "columns": [
+            {
+              "name": "Nominal",
+              "dtype": "object",
+              "missing": 2
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 4
+            },
+            {
+              "name": "Real",
+              "dtype": "object",
+              "missing": 2
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "object",
+              "missing": 4
+            }
+          ]
+        },
+        {
+          "sheet": "Home Prices (Raw Data)",
+          "rows": 143,
+          "n_columns": 7,
+          "columns": [
+            {
+              "name": "Home Price data from Robert Shiller's website.",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 7
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 142
+            },
+            {
+              "name": "FRED Graph Observations",
+              "dtype": "object",
+              "missing": 98
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 104
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "float64",
+              "missing": 106
+            }
+          ],
+          "date_column": "Home Price data from Robert Shiller's website.",
+          "start": "1890-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Moody's Rates",
+          "rows": 115,
+          "n_columns": 8,
+          "columns": [
+            {
+              "name": "FRED Graph Observations",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 7
+            },
+            {
+              "name": "FRED Graph Observations.1",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 46
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "float64",
+              "missing": 8
+            },
+            {
+              "name": "Unnamed: 12",
+              "dtype": "float64",
+              "missing": 75
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "float64",
+              "missing": 75
+            }
+          ],
+          "date_column": "FRED Graph Observations",
+          "start": "1919-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Home Prices",
+          "rows": 100,
+          "n_columns": 4,
+          "columns": [
+            {
+              "name": "Unnamed: 0",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 98
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 98
+            }
+          ],
+          "date_column": "Unnamed: 0",
+          "start": "1927-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Gold Prices",
+          "rows": 99,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "Year",
+              "dtype": "int64",
+              "missing": 0
+            },
+            {
+              "name": "Price per oz",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Source for pre-1970: https://nma.org/wp-content/uploads/2016/09/historic_gold_prices_1833_pres.pdf (average price for year)",
+              "dtype": "object",
+              "missing": 98
+            }
+          ],
+          "date_column": "Year",
+          "start": "1927-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Nominal vs Real Data",
+          "rows": 98,
+          "n_columns": 15,
+          "columns": [
+            {
+              "name": "Year",
+              "dtype": "int64",
+              "missing": 0
+            },
+            {
+              "name": "S&P 500 (includes dividends)",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "3-month T.Bill",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "US T. Bond (10-year)",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Inflation Rate",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "S&P 500 (Real)",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "T. Bill (Real)",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "T.Bond (Real)",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Year.1",
+              "dtype": "int64",
+              "missing": 0
+            },
+            {
+              "name": "Nominal value of $100 invested in 1928",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Real value of $100 invested in 1928",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "object",
+              "missing": 88
+            },
+            {
+              "name": "Stocks",
+              "dtype": "float64",
+              "missing": 88
+            },
+            {
+              "name": "T. Bills",
+              "dtype": "float64",
+              "missing": 88
+            },
+            {
+              "name": "T. Bonds",
+              "dtype": "float64",
+              "missing": 88
+            }
+          ],
+          "date_column": "Year",
+          "start": "1928-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        },
+        {
+          "sheet": "Sheet11",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        },
+        {
+          "sheet": "Sheet12",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        },
+        {
+          "sheet": "Sheet13",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        },
+        {
+          "sheet": "Sheet14",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        },
+        {
+          "sheet": "Sheet15",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        },
+        {
+          "sheet": "Sheet16",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        }
+      ],
+      "id": "D13",
+      "description": "Damodaran raw workbook",
+      "provider": "Aswath Damodaran (NYU Stern)",
+      "url": "https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls",
+      "frequency_registry": "Annual",
+      "period_needed": "1928 \u2192 2025",
+      "method": "script",
+      "key": "",
+      "source": "Aswath Damodaran (NYU Stern): https://pages.stern.nyu.edu/~adamodar/pc/datasets/histretSP.xls"
+    },
+    "etf_prices_daily.csv": {
+      "description": "ETF adjusted closes: SPY, IEF, TLT, HYG, VNQ, PSP, GLD, RSP",
+      "provider": "Yahoo Finance via `yfinance`",
+      "url": "tickers",
+      "method": "script",
+      "key": "",
+      "source": "Yahoo Finance via `yfinance`: tickers",
+      "file": "etf_prices_daily.csv",
+      "sha256": "2d873e46bb8891381a77cd9e81a7e95f2e5c9ab30c897717d543b473154b268c",
+      "size": 987598,
+      "profiled_at": "2026-11-01T17:11:57",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 6248,
+          "n_columns": 10,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "GLD",
+              "dtype": "float64",
+              "missing": 726
+            },
+            {
+              "name": "HYG",
+              "dtype": "float64",
+              "missing": 1326
+            },
+            {
+              "name": "IEF",
+              "dtype": "float64",
+              "missing": 144
+            },
+            {
+              "name": "PDP",
+              "dtype": "float64",
+              "missing": 1298
+            },
+            {
+              "name": "PSP",
+              "dtype": "float64",
+              "missing": 1212
+            },
+            {
+              "name": "RSP",
+              "dtype": "float64",
+              "missing": 334
+            },
+            {
+              "name": "SPY",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "TLT",
+              "dtype": "float64",
+              "missing": 144
+            },
+            {
+              "name": "VNQ",
+              "dtype": "float64",
+              "missing": 690
+            }
+          ],
+          "date_column": "Date",
+          "start": "2002-01-02",
+          "end": "2026-10-30",
+          "frequency": "daily"
+        }
+      ],
+      "id": "D14",
+      "frequency_registry": "Daily",
+      "period_needed": "2002-01 \u2192 latest (HYG from 2007-04)"
+    },
+    "ff3_monthly.csv": {
+      "file": "ff3_monthly.csv",
+      "sha256": "f5ea2fa174b3fbf9c4764a2d5bc61169f61bd5bb27912f663908d15c1623fc70",
+      "size": 38502,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 1203,
+          "n_columns": 5,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Mkt-RF",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "SMB",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "HML",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "RF",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1926-07-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D02",
+      "description": "Fama-French 3 factors: Mkt-RF, SMB, HML, RF (% per month)",
+      "provider": "Ken French Data Library",
+      "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+      "frequency_registry": "Monthly",
+      "period_needed": "1926-07 \u2192 latest",
+      "method": "script",
+      "key": "",
+      "source": "Ken French Data Library: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip"
+    },
+    "ff_umd_monthly.csv": {
+      "file": "ff_umd_monthly.csv",
+      "sha256": "124506fc2c44d7326885d745bb4382cb0664866018a7820e10a15d3057e50fdc",
+      "size": 19496,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 1197,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "UMD",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1927-01-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D03",
+      "description": "Momentum factor UMD (% per month)",
+      "provider": "Ken French Data Library",
+      "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_CSV.zip",
+      "frequency_registry": "Monthly",
+      "period_needed": "1927-01 \u2192 latest",
+      "method": "script",
+      "key": "",
+      "source": "Ken French Data Library: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_CSV.zip"
+    },
+    "fred_aaa_baa.csv": {
+      "file": "fred_aaa_baa.csv",
+      "sha256": "51540d981b9db978ade11df70085b1f6e5ebcc7e6d1e7be52ea03a1dcb5f64c1",
+      "size": 27159,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 1293,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "AAA",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "BAA",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1919-01-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D05",
+      "description": "Moody's seasoned Aaa and Baa corporate bond yields (%)",
+      "provider": "FRED",
+      "url": "AAA, BAA",
+      "frequency_registry": "Monthly",
+      "period_needed": "1919-01 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: AAA, BAA"
+    },
+    "fred_cpi.csv": {
+      "file": "fred_cpi.csv",
+      "sha256": "a631d33d12bf594f5bb2fc386193d9018dc9d59dc4ef9130c5ec66ed18c742ba",
+      "size": 22789,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 1364,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "CPI",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1913-01-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D09",
+      "description": "CPI, all urban consumers, not seasonally adjusted",
+      "provider": "FRED",
+      "url": "CPIAUCNS",
+      "frequency_registry": "Monthly",
+      "period_needed": "1913 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: CPIAUCNS"
+    },
+    "fred_deficit_gdp.csv": {
+      "file": "fred_deficit_gdp.csv",
+      "sha256": "c9d346b932a133d86843960795fb31cbc4bf0f8c531f6860c7f1ff8ef5093dbe",
+      "size": 1936,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 97,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "surplus_pct_gdp",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1929-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        }
+      ],
+      "id": "D06",
+      "description": "Federal surplus or deficit (\u2212), % of GDP, fiscal year",
+      "provider": "FRED",
+      "url": "FYFSGDA188S",
+      "frequency_registry": "Annual",
+      "period_needed": "1929 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: FYFSGDA188S"
+    },
+    "fred_dgs3mo.csv": {
+      "file": "fred_dgs3mo.csv",
+      "sha256": "62a30f6934fb34a30201c881b97b2290b16e97994de7e1394dc8f4ad7f7ba00d",
+      "size": 296039,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 11290,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "DGS3MO_pct",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "DGS3MO",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1981-09-01",
+          "end": "2026-10-29",
+          "frequency": "daily"
+        }
+      ],
+      "id": "D15",
+      "description": "3-month Treasury constant-maturity yield (annualised %)",
+      "provider": "FRED",
+      "url": "DGS3MO",
+      "frequency_registry": "Daily",
+      "period_needed": "1981-09 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: DGS3MO"
+    },
+    "fred_gdp.csv": {
+      "file": "fred_gdp.csv",
+      "sha256": "a805944a009bb9ca6a9a08f129c344cd998a53dcf865cee47750b950f2b0826c",
+      "size": 1919,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 97,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "gdp_busd",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1929-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        }
+      ],
+      "id": "D16",
+      "description": "Nominal GDP, $ billions",
+      "provider": "FRED",
+      "url": "GDPA",
+      "frequency_registry": "Annual",
+      "period_needed": "1929 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: GDPA"
+    },
+    "fred_gs10.csv": {
+      "file": "fred_gs10.csv",
+      "sha256": "a216686276a72a97088bece24617a29481ce614971b2c02660fc242c356ea5c4",
+      "size": 14090,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 882,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "GS10",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1953-04-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D04",
+      "description": "10-year Treasury constant-maturity yield (%)",
+      "provider": "FRED",
+      "url": "GS10",
+      "frequency_registry": "Monthly",
+      "period_needed": "1953-04 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: GS10"
+    },
+    "fred_interest_gdp.csv": {
+      "file": "fred_interest_gdp.csv",
+      "sha256": "96326fb727e40f4bc061c0379951d7b2674370c0935977c624f4c2bda4a08d0e",
+      "size": 1649,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 86,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "interest_pct_gdp",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1940-01-01",
+          "end": "2025-01-01",
+          "frequency": "annual"
+        }
+      ],
+      "id": "D07",
+      "description": "Federal interest outlays, % of GDP (for primary deficit)",
+      "provider": "FRED",
+      "url": "FYOIGDA188S",
+      "frequency_registry": "Annual",
+      "period_needed": "1940 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: FYOIGDA188S"
+    },
+    "fred_mts_deficit.csv": {
+      "file": "fred_mts_deficit.csv",
+      "sha256": "3c1a6f3be5bd79789db9fa49a12b055e6ec831acd4f78e3967a9f139559e017c",
+      "size": 11965,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 552,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "surplus_musd",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1980-10-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D08",
+      "description": "Monthly Treasury statement surplus or deficit (\u2212), $ millions",
+      "provider": "FRED",
+      "url": "MTSDS133FMS",
+      "frequency_registry": "Monthly",
+      "period_needed": "1980-10 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: MTSDS133FMS"
+    },
+    "fred_tb3ms.csv": {
+      "file": "fred_tb3ms.csv",
+      "sha256": "83a4c4e94f1b3d40cf96dca10c829e07cbe7a79f1b323ed98d61600ff60425a3",
+      "size": 28897,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 1113,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "TB3MS_pct",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "TB3MS",
+              "dtype": "float64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1934-01-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D01",
+      "description": "3-month T-bill rate, secondary market (annualised %)",
+      "provider": "FRED",
+      "url": "TB3MS",
+      "frequency_registry": "Monthly",
+      "period_needed": "1934-01 \u2192 latest",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: TB3MS"
+    },
+    "shiller_ie_data.xls": {
+      "file": "shiller_ie_data.xls",
+      "sha256": "98a54927942e842ec07ffe73000998e793953708c345b6b27bb363e9ada8366a",
+      "size": 1675264,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "Disclaimer",
+          "rows": 0,
+          "n_columns": 0,
+          "columns": []
+        },
+        {
+          "sheet": "Data",
+          "rows": 1878,
+          "n_columns": 20,
+          "columns": [
+            {
+              "name": "Unnamed: 0",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 4
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 10
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 10
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 4
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 10
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 4
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "object",
+              "missing": 10
+            },
+            {
+              "name": "Unnamed: 11",
+              "dtype": "object",
+              "missing": 8
+            },
+            {
+              "name": "Unnamed: 12",
+              "dtype": "object",
+              "missing": 121
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "object",
+              "missing": 121
+            },
+            {
+              "name": "Unnamed: 16",
+              "dtype": "object",
+              "missing": 125
+            },
+            {
+              "name": "Unnamed: 17",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 18",
+              "dtype": "object",
+              "missing": 4
+            },
+            {
+              "name": "Unnamed: 19",
+              "dtype": "object",
+              "missing": 125
+            },
+            {
+              "name": "Unnamed: 20",
+              "dtype": "object",
+              "missing": 125
+            },
+            {
+              "name": "Unnamed: 21",
+              "dtype": "object",
+              "missing": 125
+            }
+          ],
+          "date_column": "Unnamed: 0",
+          "start": "1871-01-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D11",
+      "description": "Shiller raw workbook",
+      "provider": "Robert Shiller",
+      "url": "https://shillerdata.com/ \u2192 ie_data.xls",
+      "frequency_registry": "Monthly",
+      "period_needed": "1871 \u2192 latest",
+      "method": "script",
+      "key": "",
+      "source": "Robert Shiller: https://shillerdata.com/ \u2192 ie_data.xls"
+    },
+    "shiller_monthly.csv": {
+      "file": "shiller_monthly.csv",
+      "sha256": "19dbcd14cfa1790658c5af7e36bd9f3389c1f6be53b04a98ce3a01c115bf9d44",
+      "size": 227442,
+      "profiled_at": "2026-11-01T13:26:23",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 1870,
+          "n_columns": 10,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "P",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "D",
+              "dtype": "float64",
+              "missing": 4
+            },
+            {
+              "name": "E",
+              "dtype": "float64",
+              "missing": 4
+            },
+            {
+              "name": "CPI",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "GS10",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "real_P",
+              "dtype": "float64",
+              "missing": 0
+            },
+            {
+              "name": "real_D",
+              "dtype": "float64",
+              "missing": 4
+            },
+            {
+              "name": "real_E",
+              "dtype": "float64",
+              "missing": 4
+            },
+            {
+              "name": "CAPE",
+              "dtype": "float64",
+              "missing": 120
+            }
+          ],
+          "date_column": "Date",
+          "start": "1871-01-01",
+          "end": "2026-10-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D10",
+      "description": "S&P composite P, D, E, CPI, real EPS, CAPE (parsed from ie_data.xls)",
+      "provider": "Robert Shiller",
+      "url": "https://shillerdata.com/ (link to ie_data.xls found on the page; the Yale copy stopped in 2023)",
+      "frequency_registry": "Monthly",
+      "period_needed": "1871 \u2192 latest",
+      "method": "script",
+      "key": "",
+      "source": "Robert Shiller: https://shillerdata.com/ (link to ie_data.xls found on the page; the Yale copy stopped in 2023)"
+    },
+    "wb_cmo_monthly.xlsx": {
+      "file": "wb_cmo_monthly.xlsx",
+      "sha256": "ea1c350827878ea3bbe30e3cda16a13fd3bd5b409b8458940dc94a36b5a33154",
+      "size": 586099,
+      "profiled_at": "2026-11-01T16:02:11",
+      "sheets": [
+        {
+          "sheet": "Mismatch Details",
+          "rows": 154,
+          "n_columns": 7,
+          "columns": [
+            {
+              "name": "MISMATCH DETAILS",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 1
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 1
+            }
+          ]
+        },
+        {
+          "sheet": "Monthly Prices",
+          "rows": 806,
+          "n_columns": 72,
+          "columns": [
+            {
+              "name": "World Bank Commodity Price Data (The Pink Sheet)",
+              "dtype": "object",
+              "missing": 2
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 11",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 12",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 13",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 15",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 16",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 17",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 18",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 19",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 20",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 21",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 22",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 23",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 24",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 25",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 26",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 27",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 28",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 29",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 30",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 31",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 32",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 33",
+              "dtype": "object",
+              "missing": 7
+            },
+            {
+              "name": "Unnamed: 34",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 35",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 36",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 37",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 38",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 39",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 40",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 41",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 42",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 43",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 44",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 45",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 46",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 47",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 48",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 49",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 50",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 51",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 52",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 53",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 54",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 55",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 56",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 57",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 58",
+              "dtype": "object",
+              "missing": 3
+            },
+            {
+              "name": "Unnamed: 59",
+              "dtype": "object",
+              "missing": 3
+            }
+          ]
+        },
+        {
+          "sheet": "Monthly Indices",
+          "rows": 808,
+          "n_columns": 17,
+          "columns": [
+            {
+              "name": "Unnamed: 0",
+              "dtype": "object",
+              "missing": 4
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 6",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 7",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 9",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 10",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 11",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 12",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 13",
+              "dtype": "object",
+              "missing": 5
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 15",
+              "dtype": "object",
+              "missing": 6
+            },
+            {
+              "name": "Unnamed: 16",
+              "dtype": "object",
+              "missing": 5
+            }
+          ]
+        },
+        {
+          "sheet": "Description",
+          "rows": 118,
+          "n_columns": 3,
+          "columns": [
+            {
+              "name": "World Bank Commodity Price Data (The Pink Sheet)",
+              "dtype": "object",
+              "missing": 56
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 13
+            },
+            {
+              "name": "Unnamed: 19",
+              "dtype": "object",
+              "missing": 36
+            }
+          ]
+        },
+        {
+          "sheet": "Index Weights",
+          "rows": 71,
+          "n_columns": 10,
+          "columns": [
+            {
+              "name": "Weights Used in the World Bank Commodity Price Index (in Percent) 1/",
+              "dtype": "object",
+              "missing": 58
+            },
+            {
+              "name": "Unnamed: 1",
+              "dtype": "object",
+              "missing": 68
+            },
+            {
+              "name": "Unnamed: 2",
+              "dtype": "object",
+              "missing": 59
+            },
+            {
+              "name": "Unnamed: 3",
+              "dtype": "object",
+              "missing": 63
+            },
+            {
+              "name": "Unnamed: 4",
+              "dtype": "object",
+              "missing": 49
+            },
+            {
+              "name": "Unnamed: 5",
+              "dtype": "object",
+              "missing": 51
+            },
+            {
+              "name": "Unnamed: 8",
+              "dtype": "object",
+              "missing": 17
+            },
+            {
+              "name": "Unnamed: 11",
+              "dtype": "object",
+              "missing": 20
+            },
+            {
+              "name": "Unnamed: 14",
+              "dtype": "object",
+              "missing": 51
+            },
+            {
+              "name": "Unnamed: 18",
+              "dtype": "object",
+              "missing": 70
+            }
+          ]
+        }
+      ],
+      "id": "D21",
+      "description": "World Bank Pink Sheet raw workbook",
+      "provider": "World Bank Commodity Price Data (Pink Sheet)",
+      "url": "as D20",
+      "frequency_registry": "Monthly",
+      "period_needed": "1960-01 \u2192 latest",
+      "method": "script",
+      "key": "",
+      "source": "World Bank Commodity Price Data (Pink Sheet): as D20"
+    },
+    "wb_gold_monthly.csv": {
+      "file": "wb_gold_monthly.csv",
+      "sha256": "83682aa8b286259f2041e80ee7b03939373e13a72963c22e3d14d56346414430",
+      "size": 12075,
+      "profiled_at": "2026-11-01T16:02:14",
+      "sheets": [
+        {
+          "sheet": "",
+          "rows": 801,
+          "n_columns": 2,
+          "columns": [
+            {
+              "name": "Date",
+              "dtype": "object",
+              "missing": 0
+            },
+            {
+              "name": "gold_usd_oz",
+              "dtype": "int64",
+              "missing": 0
+            }
+          ],
+          "date_column": "Date",
+          "start": "1960-01-01",
+          "end": "2026-09-01",
+          "frequency": "monthly"
+        }
+      ],
+      "id": "D20",
+      "description": "Gold price, $/troy oz (parsed from the Pink Sheet)",
+      "provider": "World Bank Commodity Price Data (Pink Sheet)",
+      "url": "https://www.worldbank.org/en/research/commodity-markets \u2192 CMO-Historical-Data-Monthly.xlsx, sheet \"Monthly Prices\"",
+      "frequency_registry": "Monthly",
+      "period_needed": "1960-01 \u2192 latest",
+      "method": "script",
+      "key": "",
+      "source": "World Bank Commodity Price Data (Pink Sheet): https://www.worldbank.org/en/research/commodity-markets \u2192 CMO-Historical-Data-Monthly.xlsx, sheet \"Monthly Prices\""
+    }
+  }
 }

@@ -106,6 +106,8 @@ When you open the notebook, click **Select Kernel** (top right) → **Python Env
 
 ## 7. Get the team bundle (files not in GitHub)
 
+Most datasets are downloaded by the notebook (§1), so you only need the bundle for the course materials, papers and style notebooks.
+
 Chong Yee shares a zip named `QF600_Final_Group6_bundle_<date>.zip`.
 
 1. Put the zip directly inside `QF600/Final Assignment/`.
@@ -120,13 +122,13 @@ Chong Yee shares a zip named `QF600_Final_Group6_bundle_<date>.zip`.
 
 ## 8. Add your FRED API key
 
-The notebook downloads interest-rate data from FRED.
+The notebook downloads data from FRED (needs a free key), Ken French, Shiller, Damodaran and Yahoo Finance (no key needed).
 
-1. Get a free key at <https://fred.stlouisfed.org/docs/api/api_key.html>. Create an account, then go to *My Account → API Keys*.
+1. Get a free key at <https://fred.stlouisfed.org/docs/api/api_key.html>. Create an account, then go to *My Account → API Keys → Request API Key*. It's issued straight away.
 2. In `QF600/Final Assignment/`, copy `credentials.example.yaml` to a new file named `credentials.yaml`.
 3. Replace `<your-fred-api-key>` with your key, so the line reads `fred_key: abc123…`. The notebook reads it as `creds["fred_key"]`.
 
-`credentials.yaml` is gitignored. **Never paste your key into the notebook itself**, because the repo is public.
+`credentials.yaml` is gitignored. **Never paste a key or password into the notebook itself**, because the repo is public.
 
 ## 9. Install Claude Code in VS Code
 
@@ -208,6 +210,7 @@ These aren't specific to this project, but they help with it. Type `/` in the Cl
 | `python3: command not found` (Windows) | Use `python`, or reinstall Python with "Add to PATH" ticked |
 | Notebook can't find `fredapi` / `pandas` | Kernel isn't the `.venv` one. Use **Select Kernel** and pick `.venv` |
 | `FileNotFoundError: credentials.yaml` | Do step 8 |
+| `KeyError: 'fred_key'` | `credentials.yaml` has no `fred_key:` line, or it's misspelt. See step 8 |
 | Notebook can't find a file in `datasets/` | Do step 7 (team bundle) |
 | Claude doesn't list the `qf600-*` skills | Open `QF600/Final Assignment` as the VS Code folder (or ask Claude about a file in it); pull the latest `main` |
 | `git push` rejected | Run `git pull` first, then push again. Ask Chong Yee if you get a permissions error |
