@@ -71,7 +71,7 @@ def report_template():
         ("1 Research Problem and Impact", "[R2.3 Define the problem and why it matters to an investor.]"),
         ("2 Data", "[Sources, frequency, period, proxies vs the paper. Full detail in Annex A.]"),
         ("3 Replication of the Paper", "[R2.4 Exhibit 3, regression, Exhibit 9. Step 2.]"),
-        ("4 Why: Profits and the Deficit", "[Step 3, H3.]"),
+        ("4 Why: Profits and the Deficit", "[Step 3, H2.]"),
         ("5 Does It Still Hold? Out-of-Sample Tests", "[Step 4. Prof points 2, 3, 5.]"),
         ("6 What Should an Investor Hold?", "[Step 5. Prof points 4, 6–11.]"),
         ("7 Strategies and Backtests", "[Step 6. S0–S6, walk-forward, Monte Carlo.]"),

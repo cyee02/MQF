@@ -20,7 +20,7 @@ All script datasets are downloaded by notebook §1 (`03 - execution_script_group
 | D04 | 10-year Treasury constant-maturity yield (%) | FRED | `GS10` | Monthly | 1953-04 → latest | script | `fred_key` | `fred_gs10.csv` | downloaded |
 | D05 | Moody's seasoned Aaa and Baa corporate bond yields (%) | FRED | `AAA`, `BAA` | Monthly | 1919-01 → latest | script | `fred_key` | `fred_aaa_baa.csv` | downloaded |
 | D06 | Federal surplus or deficit (−), % of GDP, fiscal year | FRED | `FYFSGDA188S` | Annual | 1929 → latest | script | `fred_key` | `fred_deficit_gdp.csv` | downloaded |
-| D07 | Federal interest outlays, % of GDP (for primary deficit) | FRED | `FYOIGDA188S` | Annual | 1940 → latest | script | `fred_key` | `fred_interest_gdp.csv` | downloaded |
+| D07 | Federal interest outlays, % of GDP (primary-deficit robustness check) | FRED | `FYOIGDA188S` | Annual | 1940 → latest | script | `fred_key` | `fred_interest_gdp.csv` | downloaded |
 | D08 | Monthly Treasury statement surplus or deficit (−), $ millions | FRED | `MTSDS133FMS` | Monthly | 1980-10 → latest | script | `fred_key` | `fred_mts_deficit.csv` | downloaded |
 | D09 | CPI, all urban consumers, not seasonally adjusted | FRED | `CPIAUCNS` | Monthly | 1913 → latest | script | `fred_key` | `fred_cpi.csv` | downloaded |
 | D10 | S&P composite P, D, E, CPI, real EPS, CAPE (parsed from ie_data.xls) | Robert Shiller | `https://shillerdata.com/` (link to ie_data.xls found on the page; the Yale copy stopped in 2023) | Monthly | 1871 → latest | script | — | `shiller_monthly.csv` | downloaded |
@@ -53,8 +53,8 @@ All script datasets are downloaded by notebook §1 (`03 - execution_script_group
 | `rf_m` | T-bill rate (annual %) → monthly decimal | everywhere |
 | `regime_m1/m2/m3` | rules in `context/03` §3 | step 2 |
 | `xret_eq` | Mkt-RF (already excess) | steps 2–6 |
-| `mom_cashplus` | RF + UMD | H2, S5 |
-| `primary_deficit_gdp` | −(FYFSGDA188S) − FYOIGDA188S (sign so positive = deficit) | step 3, S3 |
+| `mom_cashplus` | RF + UMD | momentum check, S4, benchmark |
+| `deficit` | −(FYFSGDA188S) (sign so positive = deficit); primary = minus FYOIGDA188S, robustness only | step 3 (H2), S3, step 5 terciles |
 | `cape_gap` | 1/CAPE − real 10-yr yield (or CAPE vs its trailing median) | step 5 terciles |
 
 ## Adding a new dataset (checklist; `qf600-data-sync` follows it)

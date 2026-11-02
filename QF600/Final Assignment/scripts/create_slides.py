@@ -76,14 +76,14 @@ def build():
     a = card(s, "txt:s2.parta", 3.7, 1.0, 5.9, 1.5, "PART A · REPLICATE THE PAPER",
              "H0: the rate level makes no difference\nH1: after high rates, stocks earn less above cash")
     b = card(s, "txt:s2.partb", 3.7, 2.7, 5.9, 1.5, "PART B · TRY TO PROVE IT WRONG",
-             "H2: the Sharpe ratio holds up\nH3: a big deficit offsets high rates", highlight=True)
+             "H2: a big deficit offsets high rates", highlight=True)
     finish(s, "Presenter 1", "0:40", "1:50",
            f"The T-bill rate is {R['today_tbill']} today, so by the paper's own rule we are in a higher-rate month. "
            "We wrote our hypotheses down before looking at any results, in two parts. "
            "Part A replicates the paper: H0 says the rate level makes no difference to stocks' return above cash; "
            "H1 is the paper's claim that it shrinks.\n[CLICK 1]\n"
-           "Part B is ours, and tries to prove the paper wrong. H2: even if returns fall, the return per unit of risk, "
-           "the Sharpe ratio, holds up. H3: a big government deficit keeps company profits growing, offsetting high rates.",
+           "Part B is ours, and tries to prove the paper wrong. H2: a big government deficit keeps company profits growing, "
+           "offsetting high rates.",
            clicks=[b])
 
     # 3 · data & regimes --------------------------------------------------------
@@ -110,35 +110,31 @@ def build():
            "reproduces it closely. Credit shows the same pattern; Treasuries barely change.",
            clicks=[hi])
 
-    # 5 · H0 / H2 -----------------------------------------------------------------
-    s = D.content_slide(prs, "2", "H0 rejected, and risk doesn't explain it", "Presenter 2")
-    fig(s, "fig03_h2_sharpe", 0.4, 1.0, 5.8)
+    # 5 · H0 ---------------------------------------------------------------------
+    s = D.content_slide(prs, "2", "Not luck: the gap is statistically significant", "Presenter 2")
+    fig(s, "fig01_regimes", 0.4, 1.0, 5.8)
     stat(s, "h0_rejections", "of 6 tests reject H0 (Newey-West, 5%)", 6.5, 1.0, w=3.1, h=1.1)
     stat(s, "reg_t_ols_eq", "t-stat, rate predicts returns (paper −2.2)", 6.5, 2.25, w=3.1, h=1.1)
-    h2 = stat(s, "h2_gap_paper", "Sharpe gap; 95% interval excludes 0 → H2 rejected", 6.5, 3.5, w=3.1, h=1.1, color="orange")
+    stat(s, "mc_p_stay_high", "chance a high-rate month is followed by another", 6.5, 3.5, w=3.1, h=1.1)
     finish(s, "Presenter 2", "4:30", "6:10",
            f"Formally, {R['h0_rejections']} of our 6 tests reject H0, using Newey-West errors because rate levels persist. "
-           f"The paper's regression gives t of {R['reg_t_ols_eq']}, against minus 2.2 in the paper. So H1, the paper's claim, holds.\n"
-           "Our first challenge, H2, asked whether high-rate periods are just calmer, so the reward per unit of risk is the same.\n[CLICK 1]\n"
-           f"It isn't. The Sharpe ratio is {R['h2_sharpe_lower_paper']} after lower-rate months and {R['h2_sharpe_higher_paper']} "
-           "after higher-rate months, almost exactly the paper's 0.57 and 0.31, and the bootstrap interval for the gap excludes zero. "
-           "H2 is rejected.\n→ Hand over to Presenter 3",
-           clicks=[h2])
+           f"The paper's regression gives t of {R['reg_t_ols_eq']}, against minus 2.2 in the paper. So H1, the paper's claim, holds."
+           "\n→ Hand over to Presenter 3")
 
-    # 6 · H3 -------------------------------------------------------------------------
-    s = D.content_slide(prs, "3", "H3: a big deficit doesn't offset high rates", "Presenter 3")
-    fig(s, "fig04_h3_deficit", 0.4, 1.0, 5.8)
+    # 6 · H2 ---------------------------------------------------------------------
+    s = D.content_slide(prs, "3", "Profits stall, but a big deficit offsets most of it", "Presenter 3")
+    fig(s, "fig04_h2_deficit", 0.4, 1.0, 5.8)
     stat(s, "eps_growth_lower", "real earnings growth after LOW rates (paper 11%)", 6.5, 1.0, w=3.1, h=1.0)
     stat(s, "eps_growth_higher", "after HIGH rates (paper 1%)", 6.5, 2.1, w=3.1, h=1.0, color="orange")
-    h3 = stat(s, "h3_diff_high", "big vs small deficit, after high rates: not significant", 6.5, 3.2, w=3.1, h=1.2, color="orange")
+    h2 = stat(s, "h2_gap_5y", f"big vs small deficit, next 5 yrs, high rates (t = {R['h2_t_5y']})", 6.5, 3.2, w=3.1, h=1.2)
     finish(s, "Presenter 3", "6:10", "7:40",
            f"Why do premiums shrink? The paper's answer is profits. We confirm it: real earnings grew {R['eps_growth_lower']} a year "
            f"after lower-rate months and {R['eps_growth_higher']} after higher-rate months.\n"
-           "Our second challenge, H3, says a big deficit should keep profits up, because government spending becomes company income. "
-           "That could explain 2024 and 2025.\n[CLICK 1]\n"
-           f"It doesn't. After high-rate months, a big deficit goes with a {R['h3_diff_high']} difference in the next year's return, "
-           f"with a t-stat of {R['h3_t_high']}: the wrong sign and not significant. H3 is rejected.",
-           clicks=[h3])
+           "Our challenge, H2, says a big deficit should keep profits up, because government spending becomes company income. "
+           "We test it on annual data, one, three and five years ahead, because the deficit is published yearly and the channel takes years.\n[CLICK 1]\n"
+           f"After high-rate years, stocks earned {R['h2_ret_high_big_5y']} a year above cash over five years with a big deficit, "
+           f"against {R['h2_ret_high_small_5y']} with a small one (t = {R['h2_t_5y']}). H2 is supported, but the result is fragile.",
+           clicks=[h2])
 
     # 7 · OOS ----------------------------------------------------------------------------
     s = D.content_slide(prs, "3", "Right about history, weak as a forecast", "Presenter 3")
@@ -241,10 +237,9 @@ def build():
     fig(s, "fig02_exhibit3_replication", 0.4, 1.0, 4.5)
     fig(s, "fig06_oos_growth", 5.1, 1.0, 4.5)
     finish(s, "Presenter 5", "15:40", "15:50", "Backup slide, only if asked: the replication of Exhibit 3 and the out-of-sample backtest.")
-    s = D.content_slide(prs, "B", "Annex B: tests of H2 and H3", "Presenter 5")
-    fig(s, "fig03_h2_sharpe", 0.4, 1.0, 4.5)
-    fig(s, "fig04_h3_deficit", 5.1, 1.0, 4.5)
-    finish(s, "Presenter 5", "15:50", "16:00", "Backup slide, only if asked: the Sharpe-ratio test (H2) and the deficit test (H3).")
+    s = D.content_slide(prs, "B", "Annex B: the deficit test (H2)", "Presenter 5")
+    fig(s, "fig04_h2_deficit", 0.4, 1.0, 9.2)
+    finish(s, "Presenter 5", "15:50", "16:00", "Backup slide, only if asked: the deficit test (H2).")
 
     prs.save(OUT_PPTX)
 

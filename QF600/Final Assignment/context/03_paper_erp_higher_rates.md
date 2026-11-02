@@ -199,7 +199,7 @@ Liquid alts keep large T-bill holdings: (1) **long/short financing**: short proc
 ---
 
 ## 7. What is ours, not the paper's (from the walkthrough)
-- H3 deficit / Kalecki profits channel; deficit split of regimes.
+- H2 deficit / Kalecki profits channel; annual deficit split of high-rate years.
 - 1926–1995 / 1996–2026 out-of-sample split; 2024–26 check; simpler "rate > 5-yr average" rule.
 - Gold; 60/40 vs 50/50 vs 70/30; good/middle/bad terciles; strategies S0–S5; Monte Carlo of "rates stay high" vs "rates fall".
 - Equal-weight vs cap-weight S&P (RSP vs SPY) for the concentration explanation.

@@ -6,7 +6,7 @@ Datasets used by `03 - execution_script_group_6.ipynb`. Script-downloaded files 
 
 <!-- AUTO:BEGIN data_sync -->
 
-_Last synced: 2026-11-01T22:08:31 · 18 dataset(s)._
+_Last synced: 2026-11-03T00:47:30 · 18 dataset(s)._
 
 ## Summary
 
@@ -14,16 +14,16 @@ _Last synced: 2026-11-01T22:08:31 · 18 dataset(s)._
 |---|------|-------------|--------|-----------|--------|------|---------|
 | 1 | `damodaran_annual.csv` | Annual returns: S&P 500, small cap, 3M T-bill, 10Y T-bond, Baa corporate, real estate, gold (parsed) | Aswath Damodaran (NYU Stern) | annual | 1928-01-01 → 2025-01-01 | 98 | 8 |
 | 2 | `damodaran_histretSP.xls` | Damodaran raw workbook | Aswath Damodaran (NYU Stern) | annual | 1890-01-01 → 2025-01-01 | 143 | 7 |
-| 3 | `etf_prices_daily.csv` | ETF adjusted closes: SPY, IEF, TLT, HYG, VNQ, PSP, GLD, RSP | Yahoo Finance via `yfinance` | daily | 2002-01-02 → 2026-10-30 | 6248 | 10 |
+| 3 | `etf_prices_daily.csv` | ETF adjusted closes: SPY, IEF, TLT, HYG, VNQ, PSP, GLD, RSP | Yahoo Finance via `yfinance` | daily | 2002-01-02 → 2026-11-02 | 6249 | 10 |
 | 4 | `ff3_monthly.csv` | Fama-French 3 factors: Mkt-RF, SMB, HML, RF (% per month) | Ken French Data Library | monthly | 1926-07-01 → 2026-09-01 | 1203 | 5 |
 | 5 | `ff_umd_monthly.csv` | Momentum factor UMD (% per month) | Ken French Data Library | monthly | 1927-01-01 → 2026-09-01 | 1197 | 2 |
-| 6 | `fred_aaa_baa.csv` | Moody's seasoned Aaa and Baa corporate bond yields (%) | FRED | monthly | 1919-01-01 → 2026-09-01 | 1293 | 3 |
+| 6 | `fred_aaa_baa.csv` | Moody's seasoned Aaa and Baa corporate bond yields (%) | FRED | monthly | 1919-01-01 → 2026-10-01 | 1294 | 3 |
 | 7 | `fred_cpi.csv` | CPI, all urban consumers, not seasonally adjusted | FRED | monthly | 1913-01-01 → 2026-09-01 | 1364 | 2 |
 | 8 | `fred_deficit_gdp.csv` | Federal surplus or deficit (−), % of GDP, fiscal year | FRED | annual | 1929-01-01 → 2025-01-01 | 97 | 2 |
 | 9 | `fred_dgs3mo.csv` | 3-month Treasury constant-maturity yield (annualised %) | FRED | daily | 1981-09-01 → 2026-10-29 | 11290 | 3 |
 | 10 | `fred_gdp.csv` | Nominal GDP, $ billions | FRED | annual | 1929-01-01 → 2025-01-01 | 97 | 2 |
 | 11 | `fred_gs10.csv` | 10-year Treasury constant-maturity yield (%) | FRED | monthly | 1953-04-01 → 2026-09-01 | 882 | 2 |
-| 12 | `fred_interest_gdp.csv` | Federal interest outlays, % of GDP (for primary deficit) | FRED | annual | 1940-01-01 → 2025-01-01 | 86 | 2 |
+| 12 | `fred_interest_gdp.csv` | Federal interest outlays, % of GDP (primary-deficit robustness check) | FRED | annual | 1940-01-01 → 2025-01-01 | 86 | 2 |
 | 13 | `fred_mts_deficit.csv` | Monthly Treasury statement surplus or deficit (−), $ millions | FRED | monthly | 1980-10-01 → 2026-09-01 | 552 | 2 |
 | 14 | `fred_tb3ms.csv` | 3-month T-bill rate, secondary market (annualised %) | FRED | monthly | 1934-01-01 → 2026-09-01 | 1113 | 3 |
 | 15 | `shiller_ie_data.xls` | Shiller raw workbook | Robert Shiller | monthly | 1871-01-01 → 2026-09-01 | 1878 | 20 |
@@ -271,9 +271,9 @@ _Last synced: 2026-11-01T22:08:31 · 18 dataset(s)._
 - **Provider:** Yahoo Finance via `yfinance`
 - **Source / link:** tickers
 - **How obtained:** script
-- **File size:** 987 KB · sha256 `e132d3be35ac`
+- **File size:** 988 KB · sha256 `86c5a79045fc`
 
-**Shape:** 6,248 rows × 10 columns · daily · 2002-01-02 → 2026-10-30
+**Shape:** 6,249 rows × 10 columns · daily · 2002-01-02 → 2026-11-02
 
 | Column | Type | Missing |
 |--------|------|---------|
@@ -327,9 +327,9 @@ _Last synced: 2026-11-01T22:08:31 · 18 dataset(s)._
 - **Provider:** FRED
 - **Source / link:** AAA, BAA
 - **How obtained:** script (API key `fred_key` in `credentials.yaml`)
-- **File size:** 27 KB · sha256 `51540d981b9d`
+- **File size:** 27 KB · sha256 `b486db15cc48`
 
-**Shape:** 1,293 rows × 3 columns · monthly · 1919-01-01 → 2026-09-01
+**Shape:** 1,294 rows × 3 columns · monthly · 1919-01-01 → 2026-10-01
 
 | Column | Type | Missing |
 |--------|------|---------|
@@ -415,7 +415,7 @@ _Last synced: 2026-11-01T22:08:31 · 18 dataset(s)._
 
 ## 12. `fred_interest_gdp.csv`
 
-- **Description:** Federal interest outlays, % of GDP (for primary deficit)
+- **Description:** Federal interest outlays, % of GDP (primary-deficit robustness check)
 - **Provider:** FRED
 - **Source / link:** FYOIGDA188S
 - **How obtained:** script (API key `fred_key` in `credentials.yaml`)
