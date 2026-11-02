@@ -65,7 +65,7 @@ Course arc (L1 p3): W1 Expected utility · W2 Efficient frontier · W3 CAPM · W
 | **Four tests for any new signal** | (1) Out of sample? (2) Why should it pay (risk or bias story)? (3) Already known / spanned by existing factors? (4) Survives costs? Demand **t > 3.0** (Harvey–Liu–Zhu 2016) | L4 p32–36 |
 | Net alpha | Net α = gross α − turnover × cost | L4 p36 |
 
-**Project use:** apply the four tests to the rate signal and the deficit signal (step 4); momentum as cash-plus (H2).
+**Project use:** apply the four tests to the rate signal and the deficit signal (step 4); momentum as cash-plus (§2.6).
 
 ## Week 5 · Advanced portfolio construction (L5)
 

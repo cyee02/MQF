@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-11-01T22:08:31",
+  "synced_at": "2026-11-03T00:47:30",
   "files": {
     "damodaran_annual.csv": {
       "file": "damodaran_annual.csv",
@@ -811,13 +811,13 @@
       "key": "",
       "source": "Yahoo Finance via `yfinance`: tickers",
       "file": "etf_prices_daily.csv",
-      "sha256": "e132d3be35ac6a3c6faed238181988406feafd2dcf54b956b37828ac868d4d47",
-      "size": 987391,
-      "profiled_at": "2026-11-01T22:08:31",
+      "sha256": "86c5a79045fc78dc251026db95eec2d04f2d869d24aabf8a9d7d9deee483d40a",
+      "size": 987504,
+      "profiled_at": "2026-11-03T00:47:30",
       "sheets": [
         {
           "sheet": "",
-          "rows": 6248,
+          "rows": 6249,
           "n_columns": 10,
           "columns": [
             {
@@ -873,7 +873,7 @@
           ],
           "date_column": "Date",
           "start": "2002-01-02",
-          "end": "2026-10-30",
+          "end": "2026-11-02",
           "frequency": "daily"
         }
       ],
@@ -973,14 +973,20 @@
       "source": "Ken French Data Library: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Momentum_Factor_CSV.zip"
     },
     "fred_aaa_baa.csv": {
+      "description": "Moody's seasoned Aaa and Baa corporate bond yields (%)",
+      "provider": "FRED",
+      "url": "AAA, BAA",
+      "method": "script",
+      "key": "fred_key",
+      "source": "FRED: AAA, BAA",
       "file": "fred_aaa_baa.csv",
-      "sha256": "51540d981b9db978ade11df70085b1f6e5ebcc7e6d1e7be52ea03a1dcb5f64c1",
-      "size": 27159,
-      "profiled_at": "2026-11-01T13:26:23",
+      "sha256": "b486db15cc483bdf7d1e8227f239dfaf34c40b43ae88d0c1f905540d85f81454",
+      "size": 27180,
+      "profiled_at": "2026-11-03T00:47:30",
       "sheets": [
         {
           "sheet": "",
-          "rows": 1293,
+          "rows": 1294,
           "n_columns": 3,
           "columns": [
             {
@@ -1001,19 +1007,13 @@
           ],
           "date_column": "Date",
           "start": "1919-01-01",
-          "end": "2026-09-01",
+          "end": "2026-10-01",
           "frequency": "monthly"
         }
       ],
       "id": "D05",
-      "description": "Moody's seasoned Aaa and Baa corporate bond yields (%)",
-      "provider": "FRED",
-      "url": "AAA, BAA",
       "frequency_registry": "Monthly",
-      "period_needed": "1919-01 \u2192 latest",
-      "method": "script",
-      "key": "fred_key",
-      "source": "FRED: AAA, BAA"
+      "period_needed": "1919-01 \u2192 latest"
     },
     "fred_cpi.csv": {
       "file": "fred_cpi.csv",
@@ -1239,7 +1239,7 @@
         }
       ],
       "id": "D07",
-      "description": "Federal interest outlays, % of GDP (for primary deficit)",
+      "description": "Federal interest outlays, % of GDP (primary-deficit robustness check)",
       "provider": "FRED",
       "url": "FYOIGDA188S",
       "frequency_registry": "Annual",
