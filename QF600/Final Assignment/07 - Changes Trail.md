@@ -11,6 +11,7 @@ How the project developed: the questions we asked at each stage, the choices we 
 | 3 | Revisions after feedback | Is the evidence fair to a real investor, and is it presented clearly? | Out-of-sample test, walk-forward tuning, alpha/beta, clearer tables |
 | 4 | Presentation restructure | Does the talk follow a clear argument? | Deck reorganised into five sections |
 | 5 | Deficit test rethink | Was our deficit test measuring the right thing? | Annual test: H2 supported but fragile; Sharpe test removed |
+| 6 | Clarity of the H0 tests | Can a reader see exactly what is tested, and why 3.3 and 3.4 differ? | Rules moved to §1.1; equations and one-sided cut-off stated; all 12 split tests shown |
 
 ## How our hypotheses evolved
 
@@ -122,10 +123,35 @@ The effect depends on counting interest in the deficit and on the 1980s, when ra
 
 ---
 
+## 6 · Making the H0 tests readable
+
+**Question:** A group review of the report found §3.3–3.4 hard to follow: the rules were defined after they were first used, the regression had no equation, "6 tests" did not match "3 rules", our rule-by-rule results seemed to be compared with the paper's asset-by-asset ones, and the §3.4 table showed only one t below −1.96 yet claimed 2 of 6 rejections.
+
+**What we changed in the report and why (no numbers changed):**
+
+| Change | Reason |
+|--------|--------|
+| Moved the M1–M3 table to §1.1, next to the paper's step 1; §3.1 now only covers how we apply it | Figure 1 and §1.1 already used the rule names before §3.1 defined them. |
+| §3.3 split into Test 1 (our gap regression, by rule) and Test 2 (the paper's regression, by asset), each with its equation and variable definitions | Makes clear that only Test 2 is compared with the paper, asset for asset; the paper reports no t-statistics by rule. |
+| Explained the overlapping 12-month windows and what Newey-West corrects | Each month is one observation, so neighbouring 12-month averages share 11 months; OLS would overstate t. |
+| Stated "six tests = 2 horizons × 3 rules" and the one-sided cut-off (t < −1.645, not ±1.96) | The −1.96 reading made the rejection counts look wrong. |
+| §3.4 table now shows both horizons for both periods, marks each rejection, and the one-month table left Annex B | The four rejections (all M3) were split between §3.4 and Annex B, so the table could not be checked on its own. Text explains why 3.4 is weaker than 3.3 (shorter periods; smaller gaps out of sample). |
+
+**Then synchronised the slides and script with the report:**
+
+| Change | Reason |
+|--------|--------|
+| Deck reordered to follow the report: data now opens Testing; 2024–25, what to hold (gold and momentum, 60% stocks) come before the strategies and backtests | The slides had moved these after the Monte Carlo, so the talk and the report told the story in different orders. |
+| M1–M3 definitions moved from the data slide to the method slide | Same move as in the report (§1.1). |
+| Presenters re-split into five contiguous blocks; hand-overs, page numbers and timings recomputed; speaker tag added to section dividers and annex slides (R3.3) | Reordering broke the old blocks; several pages were numbered twice. |
+| Script rebuilt from the slide notes: one heading per slide, grouped by presenter, with section dividers, the hidden slide and backups marked as untimed | It still followed the old 19-slide deck. The sync check now accepts untimed slides. |
+| Slide 9 notes: bars are the paper, diamonds are ours; slide 11 notes state the one-sided cut-off (t < −1.645); slide 3 given a script | The notes had bars and diamonds the wrong way round; slide 3 had no notes. |
+| Titles of slides 3 and 20 shortened to one line | Both wrapped into the line below; slide 3's title also sat above the slide edge and under the speaker tag. |
+| 5-year circular-shift p written as "p < 0.001" (notebook, results, report) | No rotation out of 5,000 beat the actual gap, so "0.000" overstated the precision. |
+
+---
+
 ## Still to do
 - Agree the current state as a group and save it as the sync snapshot (`scripts/sync_check.py --accept`).
-- Bring the script back in line with the 26-slide deck (sync checks C3 and C4).
-- Trim the talk to 16:00 (R4.1).
-- Produce slide 7's T-bill chart from the notebook (check C2).
-- Check the layout of slides 7, 11 and 13 in PowerPoint.
-- Write the 5-year circular-shift p-value as "p < 0.001" rather than "0.000".
+- Trim the talk to 16:00 (R4.1); it now runs 18:54 (check C4).
+- Check the layout of slides 3, 4, 6, 11, 13 and 16 in PowerPoint (6, 11 and 13 were slides 7, 11 and 13 before the reorder; 3, 4 and 16 changed today).

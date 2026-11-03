@@ -28,6 +28,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 NOTE_HEADER = re.compile(r"^\[(?P<name>[^\]·]+?)\s*·\s*(?P<start>\d+:\d{2})\s*[–-]\s*(?P<end>\d+:\d{2})\]")
 CLICK = re.compile(r"\[CLICK\s+(\d+)\]")
+# Slides with no speaking time: section dividers, hidden slides and Q&A backups.
+NOTE_UNTIMED = re.compile(r"^\[(?:(?P<name>[^\]·]+?)\s*·\s*)?(?P<kind>section divider|hidden|backup)\]", re.I)
 
 
 def sha(data: bytes) -> str:
@@ -193,6 +195,13 @@ def pptx_slides(prs) -> list[dict]:
             if m:
                 d["header"] = {"name": m["name"].strip(), "start": m["start"], "end": m["end"]}
             d["clicks_notes"] = len(CLICK.findall(notes))
+            u = NOTE_UNTIMED.match(notes.strip())
+            if u and not m:
+                d["untimed"] = u["kind"].lower()
+                if u["name"]:
+                    d["header_untimed"] = {"name": u["name"].strip()}
+        if s._element.get("show") == "0":
+            d["untimed"] = "hidden"
         slides.append(d)
     return slides
 
@@ -233,6 +242,7 @@ def pptx_replace_figure(prs, fig_id: str, png: Path) -> int:
 
 SCRIPT_HEAD = re.compile(r"^Slide\s+(\d+)\s*·\s*(.*)$")
 SCRIPT_META = re.compile(r"Speaker:\s*(?P<name>.+?)\s*·\s*Start\s*(?P<start>\d+:\d{2})\s*·\s*End\s*(?P<end>\d+:\d{2})")
+SCRIPT_META_UNTIMED = re.compile(r"Speaker:\s*(?P<name>.+?)\s*·\s*(?P<kind>Section divider|Hidden|Backup)\b", re.I)
 
 
 def script_slides(doc) -> list[dict]:
@@ -254,6 +264,10 @@ def script_slides(doc) -> list[dict]:
         mm = SCRIPT_META.search(t)
         if mm and cur["speaker"] is None:
             cur.update(speaker=mm["name"], start=mm["start"], end=mm["end"])
+            continue
+        mu = SCRIPT_META_UNTIMED.search(t)
+        if mu and cur["speaker"] is None:
+            cur.update(speaker=mu["name"], untimed=mu["kind"].lower())
             continue
         cur["text"].append(t)
         cur["clicks"] += len(CLICK.findall(t))
