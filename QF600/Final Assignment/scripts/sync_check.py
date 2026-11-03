@@ -284,13 +284,17 @@ def checks(st: dict, execute: bool = False) -> list[dict]:
                 bad.append(f"slide {a['n']}: title '{a['title']}' vs script '{b['title']}'")
             if (a["speaker"] or "").lower() != (b["speaker"] or "").lower():
                 bad.append(f"slide {a['n']}: tag '{a['speaker']}' vs script '{b['speaker']}'")
-            hd = a.get("header") or {}
+            hd = a.get("header") or a.get("header_untimed") or {}
             if hd and hd["name"].lower() != (a["speaker"] or "").lower():
                 bad.append(f"slide {a['n']}: notes header '{hd['name']}' vs tag '{a['speaker']}'")
         res("C3 slides = script (titles, order, speakers)", "fail" if bad else "pass", bad or "aligned")
 
         bad, prev_end, end = [], 0, 0
         for a, b in zip(sl, ss):
+            if a.get("untimed"):                         # divider, hidden or backup: no speaking time
+                if b.get("start"):
+                    bad.append(f"slide {a['n']}: {a['untimed']} slide but script gives times")
+                continue
             hd = a.get("header")
             if not hd:
                 bad.append(f"slide {a['n']}: notes missing '[NAME · m:ss–m:ss]' header")
