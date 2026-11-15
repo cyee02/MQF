@@ -11,17 +11,17 @@
 Short names (for speaker tags once mapped): Junhong · Marcus · Chong Yee · Abirame · Ramona.
 Title slide member line (HW2 format): `Chew Junhong  ·  Marcus Tan Jun Lin  ·  Chia Chong Yee  ·  Abirame d/o Asohan  ·  Ramona Chia Ming Li`
 
-## Presenter mapping: **NOT YET CONFIRMED**
+## Presenter mapping: **CONFIRMED 03 Nov 2026**
 
-Until the user confirms, **all deliverables use the placeholders `Presenter 1` … `Presenter 5`** on speaker tags, in speaker-note headers (`[PRESENTER 1 · 0:00–3:00]`) and in the script document. Do **not** guess the mapping from the old decks.
+Confirmed by the user on 03 Nov 2026: Jimmy → Marcus → Ramona → Abi → Chong Yee. Speaker tags, note headers and the script use these names as written.
 
 | Placeholder | Member | Owns (walkthrough steps / slides) | Time |
 |-------------|--------|-----------------------------------|------|
-| Presenter 1 | _TBC_ | Problem, the paper, data, hypotheses (step 1) · slides 1–4 | 0:00–3:10 |
-| Presenter 2 | _TBC_ | Replication, in/out of sample (step 2) · slides 5–7 | 3:10–6:30 |
-| Presenter 3 | _TBC_ | Mechanism, recent years (steps 3–4) · slides 8–9 | 6:30–9:00 |
-| Presenter 4 | _TBC_ | What to hold, findings → strategies (step 5) · slides 10–12 | 9:00–12:00 |
-| Presenter 5 | _TBC_ | Backtests, verdict, conclusion (step 5) · slides 13–19 | 12:00–16:00 |
+| Presenter 1 | Jimmy | Problem, the paper, data, hypotheses (step 1) · slides 1–4 | 0:00–3:10 |
+| Presenter 2 | Marcus | Replication, in/out of sample (step 2) · slides 5–7 | 3:10–6:30 |
+| Presenter 3 | Ramona | Mechanism, recent years (steps 3–4) · slides 8–9 | 6:30–9:00 |
+| Presenter 4 | Abi | What to hold, findings → strategies (step 5) · slides 10–12 | 9:00–12:00 |
+| Presenter 5 | Chong Yee | Backtests, verdict, conclusion (step 5) · slides 13–19 | 12:00–16:00 |
 | — | All | Q&A | 16:00–20:00 |
 
 The slide split is indicative; `qf600-slides` keeps it in step with the deck.
