@@ -12,6 +12,8 @@ How the project developed: the questions we asked at each stage, the choices we 
 | 4 | Presentation restructure | Does the talk follow a clear argument? | Deck reorganised into five sections |
 | 5 | Deficit test rethink | Was our deficit test measuring the right thing? | Annual test: H2 supported but fragile; Sharpe test removed |
 | 6 | Clarity of the H0 tests | Can a reader see exactly what is tested, and why 3.3 and 3.4 differ? | Rules moved to §1.1; equations and one-sided cut-off stated; all 12 split tests shown |
+| 7 | Final deck review | Does each slide say exactly what it measures, and who presents it? | Presenters named; slides 16, 17, 22 sharpened |
+| 8 | S5: the true constrained optimum | Does S4 still hold if the budget is inside the optimiser? | S5 added as a full strategy (notebook, report §6, slides); S4's edge is mostly its gold weight |
 
 ## How our hypotheses evolved
 
@@ -155,3 +157,44 @@ The effect depends on counting interest in the deficit and on the 1980s, when ra
 - Agree the current state as a group and save it as the sync snapshot (`scripts/sync_check.py --accept`).
 - Trim the talk to 16:00 (R4.1); it now runs 18:54 (check C4).
 - Check the layout of slides 3, 4, 6, 11, 13 and 16 in PowerPoint (6, 11 and 13 were slides 7, 11 and 13 before the reorder; 3, 4 and 16 changed today).
+
+---
+
+## 7 · Final deck review
+
+**Question:** Before presenting, does each slide say exactly what it measures, and does the conclusion state where we agree and disagree with the paper?
+
+| Change | Reason |
+|--------|--------|
+| Presenters named: Jimmy, Marcus, Ramona, Abi, Chong Yee (`context/09`, tags, notes, script) | Mapping confirmed by the group. |
+| Slide 16 titled "High-rate months", subtitle says it is the 1960–2026 history, not the ETF backtest | It was easy to confuse with the out-of-sample table on slide 20. |
+| Slide 16: CVaR now shown against 60/40 (5.8%) and 50/50 (5.0%); momentum's extra 7.9% a year after high rates added (paper: about the same) | The 3.5% had no comparison; the momentum result is one place we differ from the paper. |
+| Slide 16: note that momentum here is the hedged UMD factor and PDP is only a long-only stand-in | A hedged momentum fund would match these results better than PDP does in the backtests. |
+| Slide 16 script: when rates fall, bonds protect again (correlation 0.06) and momentum protects best (−0.34) | Checked in notebook §5.1; completes the rising-vs-falling picture. |
+| Slide 17: strip with today's T-bill in the middle third, and the "always high" Monte Carlo: 50/50 7.8% vs 60/40 8.1% vs diversified 11.1% | Answers Prof Liu's 60/40 vs 50/50 question directly. Labelled "if rates never fall" because slide 21's "rates stay high" is a different scenario. |
+| Slide 22 subtitle, script and report §7: the paper fits asset pricing theory, but we overturn its main conclusion | States plainly where we agree (smaller premium, smaller w*) and where we do not (cutting stocks for bonds did not pay). |
+| Slides 16, 17, 22 retimed (+35 s, +20 s, +15 s) | The added script lines; the talk now ends at 20:04. |
+
+---
+
+## 8 · S5: ridge mean-variance with the budget inside the optimiser
+
+**Question:** S4 makes its weights sum to 1 by dropping negatives and rescaling after optimising. Is that the optimum the lectures describe, and does S4's result survive the correct version?
+
+**What we did:** added **S5** as a full strategy: the same objective as S4, max μᵀw − ½wᵀ(λΣ + ηI)w, solved with Σw = 1 and w ≥ 0 as constraints (SLSQP), with the same assets, λ, regimes, walk-forward η grid, costs and split. Without the long-only bound its solution is w = Q⁻¹μ − γQ⁻¹1 (Q = λΣ + ηI): a mix of the return-seeking and minimum-variance portfolios (two-fund separation, Lecture 2 p.36, p.45–47), tending to 1/N as η grows (Lecture 5 p.17). S4's rescale keeps only Q⁻¹μ. S5 is in every backtest table, the Sharpe figure and the Monte Carlo; notebook §5.11 compares the two. The notebook was re-run on the saved datasets, so no existing number moved except the count of strategies beating B (2 → 3).
+
+**What we found:**
+- Before the rescale, S4's raw weights summed to only 1–2% at η = 20, so after rescaling they are proportional to average excess returns and the covariances play no part; this is also why S4's validation Sharpe is flat above η = 0.5.
+- S5 picks η = 1 and stays near the equal split (high-rate weights 19 / 26 / 33 / 22 against S4's 7 / 23 / 54 / 17).
+- Out of sample S5 has a Sharpe of 0.67 (S4 0.81, B 0.65), lower turnover (0.39 vs 0.62) and an insignificant alpha (t = 0.54); S4's lead comes mostly from its 54% gold weight.
+- In the Monte Carlo S5 has a better worst case than S4 in every scenario, but is no better than B.
+- A scratch check (not in the deliverables) that let the optimiser hold cash did not produce a significant alpha that survives: tuned versions sit ~98% in cash; only an untuned η = 0 (100% gold when rates are high) cleared t = 1.96 out of sample, and it did badly in the Monte Carlo.
+
+**What changed in each file:**
+
+| File | Change |
+|------|--------|
+| 03 notebook | S5 defined after S4 (§5.8 tables updated), added to the results tables, Sharpe figure and Monte Carlo; §5.11 rewritten as "S5 against S4"; the separate S4c cells removed |
+| outputs, figures | 47 new `s5_*` / `s6_*_s5_*` / `mc_*_s5_*` keys replace the `s4c_*` keys; fig07 and fig09 include S5 |
+| 01 report | S5 row in the §6.2, 6.3 (weights), 6.5 and 6.6 tables; new §6.3 paragraph on S5 vs S4 with the formula; S5 sentences in the executive summary, §6.5, §6.6, §7 and §9 (new "no cash in the optimiser" limitation); corrected why S4's validation is flat |
+| 04 slides, 05 script | Slide 18 card "Ridge MV (S4, S5)"; S5 row on slide 20 (retitled) and Annex A; slide 22 label; Annex D rebuilt as "S5 against S4"; notes for 18, 20, 21, 22, 27 (slide 18 no longer says S4 shrinks toward an equal split); retimed, talk now ends 21:11 |
