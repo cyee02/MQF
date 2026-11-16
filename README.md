@@ -13,7 +13,7 @@ Coursework, notebooks, and notes for the MQF programme.
 
 | Work | Notes |
 |---|---|
-| [Final Project — SPX Options During the 2025 Liberation Day Tariff Shock](QF620/Final%20Assignment/) | Group project on how SPX options priced the April 2025 tariff shock. `analysis.ipynb` covers data prep and the implied volatility smile; [`analysis_glen.ipynb`](QF620/Final%20Assignment/analysis_glen.ipynb) is a copy that adds the SABR calibration (Section 3); report text for the SABR sections is in [SABR report sections (2.5 and 3.3).md](QF620/Final%20Assignment/SABR%20report%20sections%20%282.5%20and%203.3%29.md). |
+| [Final Project — SPX Options During the 2025 Liberation Day Tariff Shock](QF620/Final%20Assignment/) | Group project on how SPX options priced the April 2025 tariff shock. `analysis.ipynb` covers data prep, the implied volatility smile, and the volatility surface and term structure (Section 2: SVI surface anchored to the VIX, no-arbitrage checks, and the `iv_surface(timestamp)` function, with charts in [figures/](QF620/Final%20Assignment/figures/)); [`analysis_glen.ipynb`](QF620/Final%20Assignment/analysis_glen.ipynb) is a copy that adds the SABR calibration (Section 3); report text for the SABR sections is in [SABR report sections (2.5 and 3.3).md](QF620/Final%20Assignment/SABR%20report%20sections%20%282.5%20and%203.3%29.md). |
 
 ---
 
